@@ -12,6 +12,7 @@ class Restaurant(db.Model):
     capacity = db.Column(db.Integer, nullable=False)
     dinner = db.Column(db.Boolean, nullable=False)
     lunch = db.Column(db.Boolean, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
 
 class Reservation(db.Model):
     __tablename__ = 'reservations'
@@ -26,6 +27,6 @@ class Customer(db.Model):
     __tablename__ = 'customers'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    reservations = db.Column(db.Integer, nullable=False, default=0)
+    reservations = db.Column(db.Integer, nullable=True, default=0)
     reservations_list = db.relationship('Reservation', backref='customer', lazy=True)
 
