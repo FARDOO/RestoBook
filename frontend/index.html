@@ -13,7 +13,7 @@
     </header>
 
     <main>
-        <div id ="restaurant_card" class="card" style="width: 18rem;">
+        <div id ="restaurant_card" class="row">
         </div>
     </main>
     
@@ -23,8 +23,18 @@
         }  
 
         function parse_data(content){
-            const list = document.getElementById("restaurant_card")
-            const item = document.createElement()
+
+            content.forEach(restaurant => {
+                const container = document.getElementById("restaurant_card")
+                const item = document.createElement("div")
+                const image = document.createElement("img")
+                image.setAttribute("class","card-img-top")
+                image.setAttribute("src",restaurant.image_url)
+                image.append(image)
+                container.append(item)
+                item.setAttribute("class","row-cols-1 row-cols-md-2 g-4")
+            }) 
+
         }
 
         function request_error(error){
@@ -38,7 +48,7 @@
             .then(parse_data)
             .catch(request_error)
             
-
+/*
         const view_data = (data) => {
             let body = '' 
             console.log(data.restaurants)   
@@ -52,7 +62,7 @@
                     document.getElementById('restaurant_card').innerHTML = body
             });
         } 
-
+*/
 
             
 
