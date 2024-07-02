@@ -46,8 +46,26 @@ def add_customer():
                                      'name' : new_customer.name}}), 201
     except Exception as error:
         print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500       
+        return jsonify({'message' : 'server error'}), 500     
 
+@app.route('/restaurants', methods=['GET'])
+def get_restaurants():
+    try:
+        restaurants = Restaurant.query.all()
+        restaurants_data = []
+        for restaurant in restaurants:
+            restaurant_data = {
+                'id' : restaurant.id,
+                'name' : restaurant.name,
+                'capacity' : restaurant.capacity,
+                'dinner' : restaurant.dinner,
+                'lunch' : restaurant.lunch,
+                'image_url' : restaurant.image_url
+            }
+            restaurants_data.append(restaurant_data)
+        return jsonify({'restaurants' : restaurants_data}), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500      
 
 if __name__ == '__main__':
     print('Starting Server...')
