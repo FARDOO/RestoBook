@@ -3,13 +3,14 @@ from flask import jsonify
 from flask import request
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from models import db, Restaurant, Reservation, Customer  # Asegúrate de importar db correctamente
 
 app = Flask(__name__)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://santiago:1234@localhost:5432/restobook_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+CORS(app)
 @app.route("/")
 def home():
     return """
@@ -63,7 +64,7 @@ def get_restaurants():
                 'image_url' : restaurant.image_url
             }
             restaurants_data.append(restaurant_data)
-        return jsonify({'restaurants' : restaurants_data}), 201
+        return jsonify(restaurants_data), 201
     except Exception as error:
         return jsonify({'message' : 'server error'}), 500      
 
