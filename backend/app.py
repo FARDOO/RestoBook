@@ -66,7 +66,24 @@ def get_restaurants():
             restaurants_data.append(restaurant_data)
         return jsonify(restaurants_data), 201
     except Exception as error:
-        return jsonify({'message' : 'server error'}), 500      
+        return jsonify({'message' : 'server error'}), 500 
+
+@app.route('/restaurants/<id>', methods=['GET'])
+def get_restaurant_by_id(id):
+    try:
+        restaurant = Restaurant.query.get(id)       
+        restaurant_data = {
+            'id' : restaurant.id,
+            'name' : restaurant.name,
+            'capacity' : restaurant.capacity,
+            'dinner' : restaurant.dinner,
+            'lunch' : restaurant.lunch,
+            'image_url' : restaurant.image_url
+        }   
+            
+        return jsonify(restaurant_data), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500          
 
 if __name__ == '__main__':
     print('Starting Server...')
