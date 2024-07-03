@@ -20,7 +20,7 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                  <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                  <a class="nav-link" aria-current="page" href="http://localhost:8000/index.html">Inicio</a>
                   <a class="nav-link" href="#">Mis reservas</a> 
                 </div>
               </div>
@@ -69,14 +69,14 @@
                 title.setAttribute("class","card-title p-2")
                 title.append(restaurant.name)
 
-                const a =  document.createElement("a")
-                a.setAttribute("href","#")
-                a.setAttribute("class","btn btn-primary")
-                a.append("Ver")
-                
+                const button =  document.createElement("a")
+                const restaurant_id = "/restaurant?id=" + restaurant.id                
+                button.setAttribute("href",restaurant_id)
+                button.setAttribute("class","btn btn active")                
+                button.append("Ver")                
                 image_conteiner.append(image)
                 card_body.append(title)    
-                card_body.append(a)
+                card_body.append(button)
                 card.append(image_conteiner)
                 card.append(card_body)     
                 card_conteiner.append(card)
