@@ -74,19 +74,45 @@
           title.setAttribute("class","card-title")
           title.append(restaurant.name)
 
+          const subtitle = document.createElement("h6")
+          subtitle.setAttribute("class","card-subtitle mb-2 text-body-secondary")
+
+          const reservationButton = document.createElement("button");
+          reservationButton.setAttribute("class", "btn btn-outline-success");
+          reservationButton.innerHTML = "Realizar Reserva";
+          reservationButton.addEventListener("click", function() {
+            window.location.href = "http://ruta-de-tu-pagina-de-reserva"; // Reemplaza con la URL correcta
+          });
+
           const text =  document.createElement("p")        
           text.setAttribute("class","card-text")
-          text.append("Texto")     
-                     
+          text.innerHTML = "<br>Bienvenido a " + restaurant.name + ", donde la pasión por la buena comida se une con la excelencia en el servicio. " 
+                + "Disfruta de una experiencia gastronómica única en un ambiente acogedor y hospitalario, diseñado para hacer que te sientas como en casa.<br>"
+                + "Nuestro variado menú ofrece una selección de platos cuidadosamente elaborados de alta calidad.<br>Desde sabrosos platos tradicionales hasta innovadoras "
+                + "creaciones culinarias, cada bocado está preparado con dedicación y pasión. Ya sea que estés celebrando una ocasión especial o simplemente disfrutando "
+                + "de una comida casual, nuestro restaurante es el lugar perfecto.<br><br>1) Las reservas solo se mantienen durante 15 minutos después de la hora acordada."
+                + "<br>2) Si necesitas cancelar tu reserva, por favor, realizarlo con al menos 24 horas de antelación.";
           
+          if (restaurant.dinner && restaurant.lunch) {
+            subtitle.append(" Disponible para cenar y almorzar ")
+          }
+          else if (restaurant.lunch) {
+            subtitle.append(" Disponible unicamente para cenar ")
+          }
+          else if (restaurant.dinner) {
+            subtitle.append(" Disponible unicamente para almorzar ")
+          }
+
           card_body.append(title)    
+          card_body.append(subtitle)
           card_body.append(text)
+          card_body.append(reservationButton);
           card_col_first.append(image)
           card_col_second.append(card_body)
           car_row.append(card_col_first)
           car_row.append(card_col_second)                  
           container.append(car_row)    
-            
+    
 
       }
 
