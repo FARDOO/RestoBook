@@ -9,7 +9,7 @@
 </head>
 <body data-bs-theme="dark">
     <header>
-        <h1 class="display-1 p-2 m-4">Restbook</h1>
+        <h1 class="display-1 p-2 m-4">Restobook</h1>
     </header>
     
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-2 m-4">
@@ -81,7 +81,7 @@
           reservationButton.setAttribute("class", "btn btn-outline-success");
           reservationButton.innerHTML = "Realizar Reserva";
           reservationButton.addEventListener("click", function() {
-            window.location.href = "http://ruta-de-tu-pagina-de-reserva"; // Reemplaza con la URL correcta
+            window.location.href = "http://localhost:8000/createreservation/index.html"; 
           });
 
           const text =  document.createElement("p")        
@@ -112,7 +112,7 @@
           car_row.append(card_col_first)
           car_row.append(card_col_second)                  
           container.append(car_row)    
-    
+          
 
       }
 
