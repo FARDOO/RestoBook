@@ -33,48 +33,37 @@
       </nav>
 
     <main>
-      <div class="p-4 conteiner ">
-        <div id = "conteiner" class = "conteiner-card card p-3">      
+      <div class="p-4 conteiner  mb-3 p-3">
+        <div id = "conteiner" class = "conteiner-card card">      
             
             <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+                <h2 class="text-uppercase text-center mb-5">Registrarse</h2>
   
-                <form>
-  
-                  <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example1cg">Your Name</label>
-                  </div>
+                <form id = "user_form">
   
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example3cg">Your Email</label>
+                    <input type="text" id="user_name" name="name" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example1cg">Nombre de usuario</label>
                   </div>
   
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="password" id="form3Example4cg" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example4cg">Password</label>
+                    <input type="email" id="user_email" name="email" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example3cg">Email</label>
                   </div>
   
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="password" id="form3Example4cdg" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example4cdg">Repeat your password</label>
+                    <input type="password" id="user_password" name="password" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example4cg">Contraseña</label>
                   </div>
-  
-                  <div class="form-check d-flex justify-content-center mb-5">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
-                    <label class="form-check-label" for="form2Example3g">
-                      I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
-                    </label>
-                  </div>
+
   
                   <div class="d-flex justify-content-center">
-                    <button  type="button" data-mdb-button-init
-                      data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                    <button  id="register_btn" type="submit" data-mdb-button-init
+                        data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Registrarse</button>
                   </div>
   
-                  <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="#!"
-                      class="fw-bold text-body"><u>Login here</u></a></p>
+                  <p class="text-center text-muted mt-5 mb-0">¿Ya tiene una cuenta? <a href="/login"
+                      class="fw-bold text-body"><u>Ingrese desde aqui</u></a></p>
   
                 </form>
   
@@ -85,60 +74,78 @@
       </div>
     </main>   
 
-    <script>
+    <script defer>
+    
+        const form = document.getElementById("user_form")
+        const register_button = document.getElementById("register_btn")
+
+        console.log(form)
 
         function response_received(response){
             return response.json()
-        }  
-        function parse_data(restaurant){
-          
-          const container = document.getElementById("conteiner")                
-
-          const car_row = document.createElement("div")
-          car_row.setAttribute("class","row g-0")
-
-          const card_col_first =  document.createElement("div")                
-          card_col_first.setAttribute("class","col-md-4")
-
-          const image = document.createElement("img")
-          image.setAttribute("class","image-size rounded-start")                    
-          image.setAttribute("src",restaurant.image_url)  
-
-          const card_col_second =  document.createElement("div")                
-          card_col_second.setAttribute("class","col-md-5 g-4 p-4")
-
-          const card_body =  document.createElement("div")                
-          card_body.setAttribute("class","card-body ")
-
-          const title =  document.createElement("h5")
-          title.setAttribute("class","card-title")
-          title.append(restaurant.name)
-
-          const text =  document.createElement("p")        
-          text.setAttribute("class","card-text")
-          text.append("Texto")     
-                     
-          
-          card_body.append(title)    
-          card_body.append(text)
-          card_col_first.append(image)
-          card_col_second.append(card_body)
-          car_row.append(card_col_first)
-          car_row.append(card_col_second)                  
-          container.append(car_row)
-        }
+        } 
 
         function request_error(error){
             console.log("ERROR")
             console.log(error)
         }
 
-        let url = "http://127.0.0.1:5000/restaurants/" + id
-        fetch(url)
-        .then(response_received)
-        .then(parse_data)
-        .catch(request_error)
-      
+
+        form.addEventListener('submit',(event) => {
+
+          event.preventDefault()          
+          const data_form = new FormData(event.target)         
+          data = []          
+          for (let [key,value] of data_form.entries()) {
+              console.log(`${value}`)
+              data.push(value)              
+          }          
+          var data_user = {
+                      name : data[0],
+                      password : data[2]
+          }
+          let url = "http://127.0.0.1:5000//customer"
+
+          fetch(url,
+          {
+              method: "POST",
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data_user)              
+          })
+          .then(response_received)
+          .then(data => console.log(data))
+          .catch(request_error)
+        })        
+          /*
+          fetch(url, {
+            method: "POST", // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+            "Content-Type": "application/json",
+            },
+          })  
+          .then((res) => res.json())
+          .then((response) => console.log("Success:", response))
+          .catch((error) => console.error("Error:", error))
+          
+        })
+          */
+
+/*
+        let url = "http://127.0.0.1:5000//customer/"
+        fetch(url, {
+          method: "POST", // or 'PUT'
+          body: JSON.stringify(data), // data can be `string` or {object}!
+          headers: {
+            "Content-Type": "application/json",
+            },
+        })  
+        .then((res) => res.json())
+        .catch((error) => console.error("Error:", error))
+        .then((response) => console.log("Success:", response));
+  */    
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

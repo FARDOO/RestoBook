@@ -35,12 +35,17 @@ def get_customers():
 @app.route('/customer', methods=['POST'])
 def add_customer():
     try:
-        print("estoy en post")
+        print("estoy en post0")
+        print(request.json)
+        print("estoy en post1")
         data = request.json
+        print(request.json)
         name = data.get('name')
+        password = data.get('password')
+        
         if not name:
             return jsonify({'message' : 'error request'})
-        new_customer = Customer(name = name)
+        new_customer = Customer(name = name, password = password)
         db.session.add(new_customer)
         db.session.commit()
         return jsonify({'customer': {'id': new_customer.id,
@@ -78,8 +83,7 @@ def get_restaurant_by_id(id):
             'capacity' : restaurant.capacity,
             'dinner' : restaurant.dinner,
             'lunch' : restaurant.lunch,
-            'image_url' : restaurant.image_url
-        }   
+            'image_url' : restaurant.image_url        }   
             
         return jsonify(restaurant_data), 201
     except Exception as error:
