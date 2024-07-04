@@ -5,11 +5,18 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import db, Restaurant, Reservation, Customer  # Asegúrate de importar db correctamente
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://santiago:1234@localhost:5432/restobook_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+Session = sessionmaker(bind=engine)
+session = Session()
+
 CORS(app)
 @app.route("/")
 def home():
@@ -32,12 +39,32 @@ def get_customers():
         print("error: ", error)
         return jsonify({'message': 'server error'}), 500
     
+@app.route('/login', methods=['GET'])
+def login():
+    try:
+        name = request.args.get('name')
+        print(name)
+        password = request.args.get('password')
+        print(password)
+        customer = Customer.query.filter_by(name=name).first()
+        if not customer:
+            return jsonify({'message': 'name not exist'})        
+  
+        if customer and customer.password != password:
+            return jsonify({'message': 'password error'})
+        
+        customer_data = {
+                'id' : customer.id,
+                'name' : customer.name
+        }        
+        return jsonify(customer_data),201
+    except Exception as error:        
+        return jsonify({'message': 'server error'}), 500
+    
 @app.route('/customer', methods=['POST'])
 def add_customer():
-    try:
-        print("estoy en post0")
-        print(request.json)
-        print("estoy en post1")
+    try:       
+        print(request.json)        
         data = request.json
         print(request.json)
         name = data.get('name')

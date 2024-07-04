@@ -59,7 +59,7 @@
   
                   <div class="d-flex justify-content-center">
                     <button  id="register_btn" type="submit" data-mdb-button-init
-                        data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Registrarse</button>
+                        data-mdb-ripple-init class="btn btn active btn-block btn-lg gradient-custom-4 text-body">Registrarse</button>
                   </div>
   
                   <p class="text-center text-muted mt-5 mb-0">¿Ya tiene una cuenta? <a href="/login"
@@ -75,12 +75,6 @@
     </main>   
 
     <script defer>
-    
-        const form = document.getElementById("user_form")
-        const register_button = document.getElementById("register_btn")
-
-        console.log(form)
-
         function response_received(response){
             return response.json()
         } 
@@ -90,11 +84,19 @@
             console.log(error)
         }
 
+        function redirect_to_login(){
+          location.href = "http://localhost:8000/login"
+        }
+
+        const form = document.getElementById("user_form")
+        const register_button = document.getElementById("register_btn")
 
         form.addEventListener('submit',(event) => {
 
           event.preventDefault()          
-          const data_form = new FormData(event.target)         
+          const data_form = new FormData(event.target)
+          console.log("event")
+          console.log(event.target)         
           data = []          
           for (let [key,value] of data_form.entries()) {
               console.log(`${value}`)
@@ -115,37 +117,10 @@
               body: JSON.stringify(data_user)              
           })
           .then(response_received)
-          .then(data => console.log(data))
+          .then(redirect_to_login)
           .catch(request_error)
-        })        
-          /*
-          fetch(url, {
-            method: "POST", // or 'PUT'
-            body: JSON.stringify(data), // data can be `string` or {object}!
-            headers: {
-            "Content-Type": "application/json",
-            },
-          })  
-          .then((res) => res.json())
-          .then((response) => console.log("Success:", response))
-          .catch((error) => console.error("Error:", error))
-          
-        })
-          */
-
-/*
-        let url = "http://127.0.0.1:5000//customer/"
-        fetch(url, {
-          method: "POST", // or 'PUT'
-          body: JSON.stringify(data), // data can be `string` or {object}!
-          headers: {
-            "Content-Type": "application/json",
-            },
-        })  
-        .then((res) => res.json())
-        .catch((error) => console.error("Error:", error))
-        .then((response) => console.log("Success:", response));
-  */    
+        })       
+   
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

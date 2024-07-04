@@ -38,6 +38,23 @@
     </main>
     
     <script>
+
+                // Función para obtener el valor de una cookie por nombre
+        function getCookie(name) {
+            const cookieValue = document.cookie
+                .split('; ')
+                .find(row => row.startsWith(name + '='))
+                .split('=')[1];
+            return cookieValue ? decodeURIComponent(cookieValue) : null;
+        }
+
+        // Ejemplo de uso para obtener los valores de las cookies
+        const userId = getCookie('id');
+        const userName = getCookie('name');
+
+        console.log(userId)
+        console.log(userName)
+
         function response_received(response){
             return response.json()
         }  
@@ -85,7 +102,8 @@
 
                 container.append(card_conteiner)                
             }) 
-
+            console.log(userId)
+            console.log(userName)
         }
 
         function request_error(error){
