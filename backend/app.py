@@ -117,9 +117,12 @@ def add_reservation():
         data = request.json
         customer_name = data.get('customer_name')
         restaurant_id = data.get('restaurant_id')
-        diners = data.get('diners')
+        diners = int(data.get('diners'))
         date = data.get('date')
         time_of_day = data.get('time_of_day')
+
+        print("Datos recibidos:", data)
+
         
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
@@ -148,7 +151,9 @@ def add_reservation():
         new_reservation = Reservation(customer_id = customer_id, restaurant_id = restaurant_id,
                                       diners = diners, date = date, time_of_day = time_of_day)
         db.session.add(new_reservation)
+        customer.reservations += 1
         db.session.commit()
+        
         
         return jsonify({
             'message': 'Reserva creada exitosamente',

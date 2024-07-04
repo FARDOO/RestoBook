@@ -96,16 +96,16 @@
         function submit_form (event){
             event.preventDefault();
             
-            function response_received(response){
+            function response_received_reservation(response){
                 return response.json()
             } 
             
-            function parse_data(data){
+            function parse_data_reservation(data){
                 alert(data.message)
                 window.location.href = 'http://localhost:8000/index.html'
             }
             
-            function submit_error(error){
+            function submit_error_reservation(error){
             console.log("ERROR")
             console.log(error)
             }
@@ -119,9 +119,9 @@
                 },
                 body: JSON.stringify(Object.fromEntries(form)) // Convertir los datos a JSON
             })
-                .then(response_received)
-                .then(parse_data)
-                .catch(submit_error)
+                .then(response_received_reservation)
+                .then(parse_data_reservation)
+                .catch(submit_error_reservation)
         }
 
         document.getElementById('reservation').addEventListener('submit', submit_form);
