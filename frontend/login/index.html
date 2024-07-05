@@ -24,11 +24,6 @@
                   <a class="nav-link" href="#">Mis reservas</a> 
                 </div>
               </div>
-              
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Buscar restaurante" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>
           </div>
       </nav>
 
@@ -53,8 +48,11 @@
 
                   <div class="d-flex justify-content-center">
                     <button id="login_btn" type="submit" data-mdb-button-init
-                      data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Iniciar sesion</button>
-                  </div>                 
+                      data-mdb-ripple-init class="btn btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Iniciar sesion</button>
+                  </div>
+                  
+                  <p class="text-center text-muted mt-5 mb-0">No tiene una cuenta? <a href="/register"
+                    class="fw-bold text-body"><u>Registrese desde aqui</u></a></p>
   
                 </form>
   
@@ -66,8 +64,41 @@
     </main>   
 
     <script defer>
-        function response_received(response){
+        /*
+        function response_validation_name(response){
             return response.json()
+        }
+
+        function parse_data_validation_name(content){
+            const exists = content.exists
+            console.log(exists)
+            return exists
+        }
+
+        function validate_name(name){
+ 
+                    
+            var data_exists
+            let url = new URL('http://127.0.0.1:5000/customer/validation/' + name);   
+            fetch(url)
+            .then(response_validation_name)
+            .then( data => {
+                data_exists = parse_data_validation_name(data)
+                console.log('Mi exist: ', data_exists.toString())
+            })
+            .catch(request_error)
+            let return_data = data_exists
+            console.log('Mi data_exists: ', data_exists)
+            return data_exists
+            
+        }
+        */
+
+        function response_received(response){
+          const json_response = response.json()
+          console.log("esto es response")
+          console.log(json_response)
+          return json_response
         } 
 
         function request_error(error){
@@ -75,15 +106,22 @@
             console.log(error)
         }
 
-        function redirect_to_login(content){          
-            console.log(content.name)
-            const cookie = "id = " + content.id + ' ; ' + "name = " + content.name + ' ; ' 
-            document.cookie = "id = 6 ; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
-            document.cookie = "name = nombre; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
-            console.log(cookie)
+        function login(content){
 
-
-          //location.href = "http://localhost:8000/login"
+            if(content.login_u === "false"){
+                alert("El nombre de usuario ingresado no existe")
+            }else if(content.login_p === "false"){
+                alert("La contraseña ingresada es incorrecta")
+            }else{
+                console.log("login")     
+                console.log("coontent: ",content) 
+                console.log(content.name)
+                const cookie = "id = " + content.id + ' ; ' + "name = " + content.name + ' ; ' 
+                document.cookie = "id ="+ content.id +"; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
+                document.cookie = "name = " + content.name +"; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
+                console.log(cookie)
+                location.href = "http://localhost:8000"
+            }
         }
 
         const form = document.getElementById("login_user_form")
@@ -102,17 +140,34 @@
           for (let [key,value] of data_form.entries()) {
               console.log(`${value}`)
               data.push(value)              
-          }       
-   
+          }
+          
+          const customer_name =  data[0].toString()
+          const customer_pass =  data[1]
 
-          let url = new URL('http://127.0.0.1:5000/login');
-          url.searchParams.append('name', data[0])
-          url.searchParams.append('password', data[1])
-          console.log(url)
-          fetch(url)
-          .then(response_received)
-          .then(redirect_to_login)
-          .catch(request_error)
+          console.log("customer_name",data[0].toString())
+          console.log("customer_name1",customer_name)
+
+          
+          if(customer_name.length > 0){    
+              if(customer_pass.length > 0){
+                  let url = new URL('http://127.0.0.1:5000/login');
+                  url.searchParams.append('name', data[0])
+                  url.searchParams.append('password', data[1])
+                  //console.log(url)
+                  fetch(url)
+                  .then(response_received)
+                  .then(login)
+                  .catch(request_error)    
+              }else{
+                alert("Campo contraseña vacio.")
+              }         
+            
+          }else{
+            alert("Campo nombre de usuario vacio.")
+          }
+          
+ 
         })       
        
     </script>

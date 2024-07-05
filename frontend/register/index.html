@@ -43,23 +43,23 @@
   
                   <div data-mdb-input-init class="form-outline mb-4">
                     <input type="text" id="user_name" name="name" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example1cg">Nombre de usuario</label>
+                    <label class="form-label" for="form3Example1cg">Nombre de usuario (mayor a 5 caracteres)</label>
                   </div>
   
                   <div data-mdb-input-init class="form-outline mb-4">
-                    <input type="email" id="user_email" name="email" class="form-control form-control-lg" />
+                    <input type="text" id="user_email" name="email" class="form-control form-control-lg" />
                     <label class="form-label" for="form3Example3cg">Email</label>
                   </div>
   
                   <div data-mdb-input-init class="form-outline mb-4">
                     <input type="password" id="user_password" name="password" class="form-control form-control-lg" />
-                    <label class="form-label" for="form3Example4cg">Contraseña</label>
+                    <label class="form-label" for="form3Example4cg">Contraseña (mayor a 4 caracteres)</label>
                   </div>
 
   
                   <div class="d-flex justify-content-center">
                     <button  id="register_btn" type="submit" data-mdb-button-init
-                        data-mdb-ripple-init class="btn btn active btn-block btn-lg gradient-custom-4 text-body">Registrarse</button>
+                        data-mdb-ripple-init class="btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Registrarse</button>
                   </div>
   
                   <p class="text-center text-muted mt-5 mb-0">¿Ya tiene una cuenta? <a href="/login"
@@ -84,13 +84,60 @@
             console.log(error)
         }
 
+        function register(){
+          //location.href = "http://localhost:8000/login"
+        }
+
         function redirect_to_login(){
-          location.href = "http://localhost:8000/login"
+          //location.href = "http://localhost:8000/login"
         }
 
         const form = document.getElementById("user_form")
-        const register_button = document.getElementById("register_btn")
+        
 
+        const register_btn = document.getElementById("register_btn")
+        register_btn.addEventListener("click",(event) => {
+            event.preventDefault()
+            const data_name = document.getElementById("user_name")
+            const data_email = document.getElementById("user_email")
+            const data_pass = document.getElementById("user_password")
+            let data_user = {
+                        name : data_name.value,
+                        email : data_email.value,
+                        password : data_pass.value
+            }
+            console.log(data_user.name)
+            emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+            if(data_user.name.length < 6 ){
+                alert("Ingrese un nombre de usuario mas largo")
+            }else if(data_user.password.length < 5){
+              alert("Ingrese una contraseña mas largo")
+            }else if(!emailRegex.test(data_user.email)){
+              alert("Ingrese un email valido")
+            }
+            let url = "http://127.0.0.1:5000//customer"
+
+            fetch(url,
+            {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data_user)              
+            })
+            .then(response_received)
+            .then(redirect_to_login)
+            .catch(request_error)
+        })  
+            
+      
+
+        /*
+     
+        */
+      
+        
+/*
         form.addEventListener('submit',(event) => {
 
           event.preventDefault()          
@@ -101,13 +148,19 @@
           for (let [key,value] of data_form.entries()) {
               console.log(`${value}`)
               data.push(value)              
-          }          
-          var data_user = {
+          }
+
+          const data_name = document.getElementById("user_name")
+          const data_email = document.getElementById("user_email")
+          const data_pass = document.getElementById("user_password")
+          let data_user = {
                       name : data[0],
                       password : data[2]
           }
-          let url = "http://127.0.0.1:5000//customer"
 
+          let url = "http://127.0.0.1:5000//customer"
+          
+/*
           fetch(url,
           {
               method: "POST",
@@ -120,7 +173,7 @@
           .then(redirect_to_login)
           .catch(request_error)
         })       
-   
+  */ 
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
