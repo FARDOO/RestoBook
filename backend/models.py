@@ -29,5 +29,6 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
     reservations = db.Column(db.Integer, nullable=True, default=0)
     reservations_list = db.relationship('Reservation', backref='customer', lazy=True)
