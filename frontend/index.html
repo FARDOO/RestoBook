@@ -25,10 +25,11 @@
                 </div>
               </div>
 
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Buscar restaurante" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Buscar</button>
-            </form>
+            <div class="d-flex" >
+                <span  id="user_message" class="navbar-text me-3">                      
+                </span>
+                <button id="session_btn" class="btn btn-outline-success" type="submit" ></button>
+            </dib>
           </div>
       </nav>
 
@@ -38,6 +39,9 @@
     </main>
     
     <script>
+            var user_id =""
+            var user_name = ""
+    
 
                 // Función para obtener el valor de una cookie por nombre
         function getCookie(name) {
@@ -48,19 +52,81 @@
             return cookieValue ? decodeURIComponent(cookieValue) : null;
         }
 
-        // Ejemplo de uso para obtener los valores de las cookies
-        const userId = getCookie('id');
-        const userName = getCookie('name');
+        function log_in(){
+            console.log("vamos a iniciar sesion!")
+            window.location.href = "http://localhost:8000/login"
+        }
 
-        console.log(userId)
-        console.log(userName)
+        function log_out(){
+            console.log("se cerro sesion!")
+            console.log("cookie largo!!!!!!: ", document.cookie.length)
+            //elimina cookies
+            document.cookie = "name" + '=; Max-Age=-99999999;'      
+            document.cookie = "id" + '=; Max-Age=-99999999;'
+
+            const session = document.getElementById("session_btn")    
+            session.removeEventListener("click",log_out)
+            session.addEventListener("click",log_in,true)
+            console.log("child: ",session.firstChild)
+            session.removeChild(session.firstChild)
+            console.log("child: ",session.firstChild)
+            session.append("Iniciar sesion")
+            window.location.href = "http://localhost:8000/"
+        }
+
+        function user_is_login(){
+            console.log("cookie largo: ", document.cookie.length)
+            if(document.cookie.length > 0){
+                user_id = getCookie('id');
+                user_name = getCookie('name');
+                console.log("id: ",user_id)
+                console.log("name: ",user_name)
+                const user_message = document.getElementById("user_message")
+                user_message.innerHTML = "Hola, " + user_name + "!"
+                const session = document.getElementById("session_btn")  
+                //session.removeChild(session.firstChild)             
+                session.append("Cerrar sesion")
+                session.setAttribute("class","btn btn-outline-danger")
+                session.addEventListener("click",log_out,true);
+                console.log("fin IF")
+            }else if (document.cookie.length === 0){
+                console.log("inicio ELSE IF")
+                const session = document.getElementById("session_btn")    
+                session.removeEventListener("click",log_out)
+                session.addEventListener("click",log_in,true)
+                console.log("child: ",session.firstChild)               
+                //console.log("fin child: ",session.firstChild)
+                session.append("Iniciar sesion")
+                console.log("fin ELSE IF")
+            }
+
+        }
+
+        // Ejemplo de uso para obtener los valores de las cookies
+
+   
+ /*       
+        function extractCookies(cookieStr) {
+            return cookieStr
+                .match(/(^|(?<=, ))[^=;,]+=[^;]+/g)
+                .map(cookie => cookie.split('=').map(v => v.trim()))
+                .filter(v => v[0].length && v[1].length)
+                .reduce((builder, cur) => {
+                builder[cur[0]] = cur[1]
+                return builder
+            }, {})  
+        }
+        let cookie_json = extractCookies(document.cookie)
+        console.log("cookie: ", cookie_json)
+*/
+
 
         function response_received(response){
             return response.json()
         }  
 
-        function parse_data(content){
-
+        function parse_data(content){    
+               
             content.forEach(restaurant => {
                 const container = document.getElementById("restaurant_card")
 
@@ -102,8 +168,7 @@
 
                 container.append(card_conteiner)                
             }) 
-            console.log(userId)
-            console.log(userName)
+            user_is_login() 
         }
 
         function request_error(error){
