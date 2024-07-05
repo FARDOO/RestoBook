@@ -80,6 +80,21 @@ def add_customer():
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
+    
+
+@app.route('/customer/validation/<name>', methods=['GET'])
+def name_exists(name):
+    try:
+
+        customer = Customer.query.filter_by(name=name).first()
+        if not customer:
+            return jsonify({'exists': 'false'})        
+        else:
+            return jsonify({'exists': 'true'}) 
+        
+    except Exception as error:
+        print("error: ", error)
+        return jsonify({'message' : 'server error'}), 500  
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -124,3 +139,4 @@ if __name__ == '__main__':
         db.create_all()
     app.run(host='0.0.0.0', debug=True, port=port)
     print('Started...')
+
