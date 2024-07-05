@@ -48,14 +48,22 @@ def login():
         print(password)
         customer = Customer.query.filter_by(name=name).first()
         if not customer:
-            return jsonify({'message': 'name not exist'})        
+            return jsonify({'id': '',
+                            'name': '',
+                            'login_u': 'false',
+                            'login_p': 'false'})        
   
         if customer and customer.password != password:
-            return jsonify({'message': 'password error'})
+            return jsonify({'id': '',
+                            'name': '',
+                            'login_u': 'true',
+                            'login_p': 'false'}) 
         
         customer_data = {
                 'id' : customer.id,
-                'name' : customer.name
+                'name' : customer.name,
+                'login_u' : "true",
+                'login_p' : "true"
         }        
         return jsonify(customer_data),201
     except Exception as error:        
@@ -85,7 +93,6 @@ def add_customer():
 @app.route('/customer/validation/<name>', methods=['GET'])
 def name_exists(name):
     try:
-
         customer = Customer.query.filter_by(name=name).first()
         if not customer:
             return jsonify({'exists': 'false'})        
