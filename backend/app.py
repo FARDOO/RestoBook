@@ -101,7 +101,20 @@ def name_exists(name):
         
     except Exception as error:
         print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500  
+        return jsonify({'message' : 'server error'}), 500
+
+@app.route('/customer/validation/<email>', methods=['GET'])
+def email_exists(email):
+    try:
+        customer = Customer.query.filter_by(email=email).first()
+        if not customer:
+            return jsonify({'exists': 'false'})        
+        else:
+            return jsonify({'exists': 'true'}) 
+        
+    except Exception as error:
+        print("error: ", error)
+        return jsonify({'message' : 'server error'}), 500        
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
