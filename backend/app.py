@@ -39,13 +39,13 @@ def get_customers():
         print("error: ", error)
         return jsonify({'message': 'server error'}), 500
     
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
     try:
-        name = request.args.get('name')
-        print(name)
-        password = request.args.get('password')
-        print(password)
+        data = request.json
+        name = data.get('name')
+        password = data.get('password')      
+
         customer = Customer.query.filter_by(name=name).first()
         if not customer:
             return jsonify({'id': '',
@@ -77,14 +77,36 @@ def add_customer():
         print(request.json)
         name = data.get('name')
         password = data.get('password')
+        email = data.get('email')
         
+        customer_name = Customer.query.filter_by(name=name).first()
+
         if not name:
             return jsonify({'message' : 'error request'})
-        new_customer = Customer(name = name, password = password)
+        
+        if customer_name:
+            customer_email = Customer.query.filter_by(email=email).first()
+            if customer_email:
+                return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'true',
+                                'email_exists': 'true'}) 
+            return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'true',
+                                'email_exists': 'false'})         
+        
+
+        new_customer = Customer(name = name, password = password, email=email)
         db.session.add(new_customer)
         db.session.commit()
         return jsonify({'customer': {'id': new_customer.id,
-                                     'name' : new_customer.name}}), 201
+                                     'name' : new_customer.name,
+                                     'email' : new_customer.email,
+                                     'name_exists': 'false',
+                                     'email_exists': 'false'}}), 201
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
