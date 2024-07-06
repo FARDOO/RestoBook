@@ -24,75 +24,49 @@
                   <a class="nav-link" href="#">Mis reservas</a> 
                 </div>
               </div>
+              <div class="d-flex">              
+                <button id="register_btn" class="btn btn-outline-info" type="submit">Registrarse</button>
+              </div>
           </div>
       </nav>
 
     <main>
       <div class="p-4 conteiner mb-3 p-3 ">
-        <div id = "conteiner" class = "conteiner-card card p-3">      
-            
+        <div id = "conteiner" class = "conteiner-card card p-3">               
             <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5">Iniciar sesion</h2>
-  
-                <form id="login_user_form">
-  
+                <h2 class="text-uppercase text-center mb-5">Iniciar sesion</h2>  
+                <form id="login_user_form">  
                   <div data-mdb-input-init class="form-outline mb-4">
                     <input type="text" id="user_name" name="name" class="form-control form-control-lg" />
                     <label class="form-label" for="form3Example1cg">Nombre de usuario</label>
-                  </div>
-                    
+                  </div>                    
                   <div data-mdb-input-init class="form-outline mb-4">
                     <input type="password" id="user_password" name="password" class="form-control form-control-lg" />
                     <label class="form-label" for="form3Example4cg">Contraseña</label>
                   </div>
-
                   <div class="d-flex justify-content-center">
                     <button id="login_btn" type="submit" data-mdb-button-init
                       data-mdb-ripple-init class="btn btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Iniciar sesion</button>
-                  </div>
-                  
+                  </div>                  
                   <p class="text-center text-muted mt-5 mb-0">No tiene una cuenta? <a href="/register"
-                    class="fw-bold text-body"><u>Registrese desde aqui</u></a></p>
-  
-                </form>
-  
+                    class="fw-bold text-body"><u>Registrese desde aqui</u></a></p>  
+                </form>  
             </div>
-            
-
-        </div>
+          </div>
       </div>
     </main>   
 
     <script defer>
-        /*
-        function response_validation_name(response){
-            return response.json()
+
+        if (document.cookie.length > 0){
+            location.href = "http://localhost:8000/"
         }
 
-        function parse_data_validation_name(content){
-            const exists = content.exists
-            console.log(exists)
-            return exists
-        }
+        const login_button = document.getElementById("register_btn")
+        login_button.addEventListener("click",(event) =>{            
+            window.location.href = "http://localhost:8000/register"    
+        })
 
-        function validate_name(name){
- 
-                    
-            var data_exists
-            let url = new URL('http://127.0.0.1:5000/customer/validation/' + name);   
-            fetch(url)
-            .then(response_validation_name)
-            .then( data => {
-                data_exists = parse_data_validation_name(data)
-                console.log('Mi exist: ', data_exists.toString())
-            })
-            .catch(request_error)
-            let return_data = data_exists
-            console.log('Mi data_exists: ', data_exists)
-            return data_exists
-            
-        }
-        */
 
         function response_received(response){
           const json_response = response.json()
@@ -135,39 +109,37 @@
           console.log("event")
           console.log(event.target)  
           
+          const customer_name = data_form.get('name')
+          console.log("data name: ",customer_name)
 
-          data = []          
-          for (let [key,value] of data_form.entries()) {
-              console.log(`${value}`)
-              data.push(value)              
-          }
+          const customer_pass = data_form.get('password')
+          console.log("data password: ",customer_pass) 
           
-          const customer_name =  data[0].toString()
-          const customer_pass =  data[1]
-
-          console.log("customer_name",data[0].toString())
-          console.log("customer_name1",customer_name)
-
+          let data_user = {
+                          name : customer_name,                        
+                          password : customer_pass
+                          }
           
           if(customer_name.length > 0){    
               if(customer_pass.length > 0){
                   let url = new URL('http://127.0.0.1:5000/login');
-                  url.searchParams.append('name', data[0])
-                  url.searchParams.append('password', data[1])
-                  //console.log(url)
-                  fetch(url)
+                  fetch(url,
+                  {
+                      method: "POST",
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(data_user)              
+                  })
                   .then(response_received)
                   .then(login)
-                  .catch(request_error)    
+                  .catch(request_error)
               }else{
                 alert("Campo contraseña vacio.")
-              }         
-            
+              }           
           }else{
             alert("Campo nombre de usuario vacio.")
           }
-          
- 
         })       
        
     </script>
