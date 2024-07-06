@@ -80,12 +80,12 @@ def add_customer():
         email = data.get('email')
         
         customer_name = Customer.query.filter_by(name=name).first()
-
+        customer_email = Customer.query.filter_by(email=email).first()
         if not name:
             return jsonify({'message' : 'error request'})
         
         if customer_name:
-            customer_email = Customer.query.filter_by(email=email).first()
+            
             if customer_email:
                 return jsonify({'id': '',
                                 'name': '',
@@ -96,7 +96,14 @@ def add_customer():
                                 'name': '',
                                 'email': '',
                                 'name_exists': 'true',
-                                'email_exists': 'false'})         
+                                'email_exists': 'false'}) 
+        else:
+            if customer_email:
+                return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'false',
+                                'email_exists': 'true'})        
         
 
         new_customer = Customer(name = name, password = password, email=email)
@@ -167,7 +174,7 @@ def get_restaurant_by_id(id):
             'capacity' : restaurant.capacity,
             'dinner' : restaurant.dinner,
             'lunch' : restaurant.lunch,
-            'image_url' : restaurant.image_url        }   
+            'image_url' : restaurant.image_url}   
             
         return jsonify(restaurant_data), 201
     except Exception as error:
