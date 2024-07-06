@@ -42,7 +42,7 @@
         var user_id =""
         var user_name = ""
 
-        function getCookie(name) {
+        function get_cookie(name) {
             const cookieValue = document.cookie
                 .split('; ')
                 .find(row => row.startsWith(name + '='))
@@ -52,7 +52,6 @@
 
         function log_in(){
             if(document.cookie.length === 0){
-                console.log("vamos a iniciar sesion!")
                 window.location.href = "http://localhost:8000/login"
             }else{
                 window.location.href = "http://localhost:8000"
@@ -62,7 +61,6 @@
 
         function register(){
             if(document.cookie.length === 0){
-                console.log("vamos a registrarnos!")
                 window.location.href = "http://localhost:8000/register" 
             }else{
                 window.location.href = "http://localhost:8000"
@@ -71,8 +69,6 @@
         }
 
         function log_out(){
-            console.log("se cerro sesion!")
-            console.log("cookie largo!!!!!!: ", document.cookie.length)
             //elimina cookies
             document.cookie = "name" + '=; Max-Age=-99999999;'      
             document.cookie = "id" + '=; Max-Age=-99999999;'
@@ -80,39 +76,27 @@
             const session = document.getElementById("session_btn")    
             session.removeEventListener("click",log_out)
             session.addEventListener("click",log_in,true)
-            console.log("child: ",session.firstChild)
             session.removeChild(session.firstChild)
-            console.log("child: ",session.firstChild)
-            session.append("Iniciar sesion")            
-
+            session.append("Iniciar sesion")  
 
             window.location.href = "http://localhost:8000/"
         }
 
         function user_is_login(){
-            console.log("cookie largo: ", document.cookie.length)
             if(document.cookie.length > 0){
-                user_id = getCookie('id');
-                user_name = getCookie('name');
-                console.log("id: ",user_id)
-                console.log("name: ",user_name)
+                user_id = get_cookie('id');
+                user_name = get_cookie('name');
                 const user_message = document.getElementById("user_message")
                 user_message.innerHTML = "Hola, " + user_name + "!"
                 const session = document.getElementById("session_btn")  
-                //session.removeChild(session.firstChild)             
                 session.append("Cerrar sesion")
                 session.setAttribute("class","btn btn-outline-danger")
                 session.addEventListener("click",log_out,true);
-                console.log("fin IF")
             }else if (document.cookie.length === 0){
-                console.log("inicio ELSE IF")
                 const session = document.getElementById("session_btn")    
                 session.removeEventListener("click",log_out)
                 session.addEventListener("click",log_in,true)
-                console.log("child: ",session.firstChild)               
-                //console.log("fin child: ",session.firstChild)
                 session.append("Iniciar sesion")
-                console.log("fin ELSE IF")
 
                 const buttons = document.getElementById("session_btns")
                 register_btn = document.createElement("button")
@@ -125,25 +109,6 @@
             }
 
         }
-
-        // Ejemplo de uso para obtener los valores de las cookies
-
-   
- /*       
-        function extractCookies(cookieStr) {
-            return cookieStr
-                .match(/(^|(?<=, ))[^=;,]+=[^;]+/g)
-                .map(cookie => cookie.split('=').map(v => v.trim()))
-                .filter(v => v[0].length && v[1].length)
-                .reduce((builder, cur) => {
-                builder[cur[0]] = cur[1]
-                return builder
-            }, {})  
-        }
-        let cookie_json = extractCookies(document.cookie)
-        console.log("cookie: ", cookie_json)
-*/
-
 
         function response_received(response){
             return response.json()
@@ -202,9 +167,9 @@
 
         let url = 'http://127.0.0.1:5000/restaurants'
         fetch(url)
-            .then(response_received)
-            .then(parse_data)
-            .catch(request_error)                 
+        .then(response_received)
+        .then(parse_data)
+        .catch(request_error)                 
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
