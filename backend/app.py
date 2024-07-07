@@ -215,14 +215,13 @@ def get_reservations():
 @app.route('/reservation', methods=['POST'])
 def add_reservation():
     try:
-        print("estoy en post")
         data = request.json
         customer_name = data.get('customer_name')
         restaurant_id = data.get('restaurant_id')
-        diners = data.get('diners')
+        diners = int(data.get('diners'))
         date = data.get('date')
         time_of_day = data.get('time_of_day')
-        
+
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
             print("1")
@@ -259,6 +258,7 @@ def add_reservation():
         print("G")
         db.session.commit()
         print("H")
+
         return jsonify({
             'message': 'Reserva creada exitosamente',
         }), 201
