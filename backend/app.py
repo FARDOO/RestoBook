@@ -121,7 +121,7 @@ def add_customer():
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
     
-
+"""
 @app.route('/customer/validation/<name>', methods=['GET'])
 def name_exists(name):
     try:
@@ -134,7 +134,9 @@ def name_exists(name):
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500
-
+"""        
+    
+"""
 @app.route('/customer/validation/<email>', methods=['GET'])
 def email_exists(email):
     try:
@@ -147,7 +149,7 @@ def email_exists(email):
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500        
-
+"""
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -222,35 +224,41 @@ def add_reservation():
 
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
+            print("1")
             return jsonify({'message': 'Restaurante no encontrado'}), 404
         
         customer = Customer.query.filter_by(name=customer_name).first()
         if not customer:
+            print("2")
             return jsonify({'message': 'Cliente no resgistrado, por favor registrese'}), 404
         
         customer_id = customer.id
 
         if not all([customer_id, restaurant_id, diners, date, time_of_day]):
+            print("3")
             return jsonify({'message' : 'error request'}), 400
-        
+        print("A")
         capacity = restaurant.capacity
+        print("B")
         reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
+        print("C")
         total_diners = sum(reservation.diners for reservation in reservations)
-        
-        if total_diners + diners > capacity:
+        print("D")
+        if total_diners + int(diners) > capacity:
             return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha'}), 400
         elif time_of_day == 'lunch' and not restaurant.lunch:
             return jsonify({'message': 'Este restaurante no sirve almuerzo'}), 400
         elif time_of_day == 'dinner' and not restaurant.dinner:
             return jsonify({'message': 'Este restaurante no sirve cena'}), 400
-        
+        print("E")
         new_reservation = Reservation(customer_id = customer_id, restaurant_id = restaurant_id,
                                       diners = diners, date = date, time_of_day = time_of_day)
+        print("F")
         db.session.add(new_reservation)
-        customer.reservations += 1
+        print("G")
         db.session.commit()
-        
-        
+        print("H")
+
         return jsonify({
             'message': 'Reserva creada exitosamente',
         }), 201
