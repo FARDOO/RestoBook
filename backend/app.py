@@ -5,11 +5,18 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import db, Restaurant, Reservation, Customer  # Asegúrate de importar db correctamente
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 port = 5000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://santiago:1234@localhost:5432/restobook_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+Session = sessionmaker(bind=engine)
+session = Session()
+
 CORS(app)
 
 
@@ -34,23 +41,112 @@ def get_customers():
         print("error: ", error)
         return jsonify({'message': 'server error'}), 500
     
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.json
+        name = data.get('name')
+        password = data.get('password')      
+
+        customer = Customer.query.filter_by(name=name).first()
+        if not customer:
+            return jsonify({'id': '',
+                            'name': '',
+                            'login_u': 'false',
+                            'login_p': 'false'})        
+  
+        if customer and customer.password != password:
+            return jsonify({'id': '',
+                            'name': '',
+                            'login_u': 'true',
+                            'login_p': 'false'}) 
+        
+        customer_data = {
+                'id' : customer.id,
+                'name' : customer.name,
+                'login_u' : "true",
+                'login_p' : "true"
+        }        
+        return jsonify(customer_data),201
+    except Exception as error:        
+        return jsonify({'message': 'server error'}), 500
+    
 
 @app.route('/customer', methods=['POST'])
 def add_customer():
-    try:
-        print("estoy en post")
+    try:       
+        print(request.json)        
         data = request.json
+        print(request.json)
         name = data.get('name')
+        password = data.get('password')
+        email = data.get('email')
+        
+        customer_name = Customer.query.filter_by(name=name).first()
+        customer_email = Customer.query.filter_by(email=email).first()
         if not name:
-            return jsonify({'message' : 'error request'}), 400
-        new_customer = Customer(name = name)
+            return jsonify({'message' : 'error request'})   
+          
+        if customer_name:
+            
+            if customer_email:
+                return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'true',
+                                'email_exists': 'true'}) 
+            return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'true',
+                                'email_exists': 'false'}) 
+        else:
+            if customer_email:
+                return jsonify({'id': '',
+                                'name': '',
+                                'email': '',
+                                'name_exists': 'false',
+                                'email_exists': 'true'})        
+        
+
+        new_customer = Customer(name = name, password = password, email=email)
         db.session.add(new_customer)
         db.session.commit()
         return jsonify({'customer': {'id': new_customer.id,
-                                     'name' : new_customer.name}}), 201
+                                     'name' : new_customer.name,
+                                     'email' : new_customer.email,
+                                     'name_exists': 'false',
+                                     'email_exists': 'false'}}), 201
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
+    
+
+@app.route('/customer/validation/<name>', methods=['GET'])
+def name_exists(name):
+    try:
+        customer = Customer.query.filter_by(name=name).first()
+        if not customer:
+            return jsonify({'exists': 'false'})        
+        else:
+            return jsonify({'exists': 'true'}) 
+        
+    except Exception as error:
+        print("error: ", error)
+        return jsonify({'message' : 'server error'}), 500
+
+@app.route('/customer/validation/<email>', methods=['GET'])
+def email_exists(email):
+    try:
+        customer = Customer.query.filter_by(email=email).first()
+        if not customer:
+            return jsonify({'exists': 'false'})        
+        else:
+            return jsonify({'exists': 'true'}) 
+        
+    except Exception as error:
+        print("error: ", error)
+        return jsonify({'message' : 'server error'}), 500        
 
 
 @app.route('/restaurants', methods=['GET'])
@@ -83,8 +179,12 @@ def get_restaurant_by_id(id):
             'capacity' : restaurant.capacity,
             'dinner' : restaurant.dinner,
             'lunch' : restaurant.lunch,
+
             'image_url' : restaurant.image_url
         }     
+ 
+            
+
         return jsonify(restaurant_data), 201
     except Exception as error:
         return jsonify({'message' : 'server error'}), 500     
@@ -167,3 +267,4 @@ if __name__ == '__main__':
         db.create_all()
     app.run(host='0.0.0.0', debug=True, port=port)
     print('Started...')
+
