@@ -12,7 +12,7 @@
 
 <body data-bs-theme="dark">
     <header>
-        <h1 class="display-1 p-2 m-4">Restbook</h1>
+        <h1 class="display-1 p-2 m-4">Restobook</h1>
     </header>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-2 m-4">
@@ -121,7 +121,7 @@
         function parse_data(content) {
 
             content.forEach(restaurant => {
-                const container = document.getElementById("restaurant_card")
+                const container = document.getElementById("restaurant_card") // Se podria poner por fuera del forEach asi se hace solo una vez ???
 
                 const card_conteiner = document.createElement("div")
                 card_conteiner.setAttribute("class", "col")
