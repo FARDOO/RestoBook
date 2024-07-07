@@ -9,7 +9,7 @@
 </head>
 <body data-bs-theme="dark">
     <header>
-        <h1 class="display-1 p-2 m-4">Restbook</h1>
+        <h1 class="display-1 p-2 m-4">Restobook</h1>
     </header>
     
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-2 m-4">
@@ -33,28 +33,20 @@
       </nav>
 
       <div class="container">
-        <h1 class="my-4">Crear Reserva</h1>
+        <div id="title_container">
+            <h2 id="title"></h2>
+            <h6 class="text-center">Completar los siguientes Campos</h6>
+        </div>
         <form id="reservation" class="reservation_form">
+            <input type="hidden" id="restaurant_id" name="restaurant_id">
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="restaurant_option" class="form-label">Seleccione el Restaurant elegido:</label>
-                    <select class="form-select" name="restaurant_id" id="restaurant_option" required>
-                        <option disabled selected>Restaurant</option>
-                    </select>
-                </div>
                 <div class="col-md-6">
                     <label for="diners" class="form-label">Cantidad de Comensales:</label>
                     <input type="number" class="form-control" id="diners" name="diners" min="1" max="25" placeholder="Ingresa la cantidad de comensales" required>
                 </div>
-            </div>
-            <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="name" class="form-label">Nombre:</label>
                     <input type="text" class="form-control" id="name" name="customer_name" placeholder="Ingresa tu nombre" required>
-                </div>
-                <div class="col-md-6">
-                    <label for="email" class="form-label">Correo Electrónico:</label>
-                    <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo electrónico" required>
                 </div>
             </div>
             <div class="row mb-3">
@@ -63,17 +55,23 @@
                     <input type="date" class="form-control" name="date" id="date" required>
                 </div>
                 <div class="col-md-6">
+                    <label for="email" class="form-label">Correo Electrónico:</label>
+                    <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
                     <label for="time_option" class="form-label">Hora de Reserva:</label>
                     <select class="form-select" name="time_of_day" id="time_option" required>
                         <option disabled selected>Hora</option>
-                        <option value="lunch">12:00</option>
-                        <option value="lunch">12:30</option>
-                        <option value="lunch">13:00</option>
-                        <option value="lunch">13:30</option>
-                        <option value="dinner">21:00</option>
-                        <option value="dinner">21:30</option>
-                        <option value="dinner">22:00</option>
-                        <option value="dinner">22:30</option>
+                        <option value="lunch">12:00 A.M.</option>
+                        <option value="lunch">12:30 A.M.</option>
+                        <option value="lunch">13:00 A.M.</option>
+                        <option value="lunch">13:30 A.M.</option>
+                        <option value="dinner">21:00 P.M.</option>
+                        <option value="dinner">21:30 P.M.</option>
+                        <option value="dinner">22:00 P.M.</option>
+                        <option value="dinner">22:30 P.M.</option>
                     </select>
                 </div>
             </div>
@@ -92,6 +90,10 @@
     </div>
 
     <script>
+        const param = new URLSearchParams(window.location.search)
+        const id = param.get("id")
+        document.getElementById('restaurant_id').value = id;
+
 
         function submit_form (event){
             event.preventDefault();
@@ -130,15 +132,11 @@
             return response.json()
         }  
 
-        function parse_data_restaurants(content){
-            const select = document.getElementById("restaurant_option")
-
-            content.forEach(restaurant => {
-                const option = document.createElement("option")
-                option.value = restaurant.id 
-                option.textContent = restaurant.name
-                select.appendChild(option);              
-                }) 
+        function parse_data_restaurants(restaurant){    
+            const title = document.getElementById("title")
+            title.setAttribute("class","text-center")
+            title.textContent = "Esta realizando una reserva en el Restaurant " + restaurant.name
+            
         }
         
         function request_error_restaurants(error){
@@ -146,7 +144,7 @@
             console.log(error)
         }
 
-        let url = 'http://127.0.0.1:5000/restaurants'
+        let url = 'http://127.0.0.1:5000/restaurants/' + id
         fetch(url)
             .then(response_received_restaurants)
             .then(parse_data_restaurants)

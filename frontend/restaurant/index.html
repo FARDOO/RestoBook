@@ -77,12 +77,20 @@
           const subtitle = document.createElement("h6")
           subtitle.setAttribute("class","card-subtitle mb-2 text-body-secondary")
 
-          const reservationButton = document.createElement("button");
-          reservationButton.setAttribute("class", "btn btn-outline-success");
-          reservationButton.innerHTML = "Realizar Reserva";
-          reservationButton.addEventListener("click", function() {
-            window.location.href = "http://localhost:8000/createreservation/index.html"; 
-          });
+          const reservationButton = document.createElement("button")
+          reservationButton.setAttribute("class", "btn btn-outline-success")
+          reservationButton.innerHTML = "Realizar Reserva"
+          if (document.cookie.length > 0) {
+            reservationButton.addEventListener("click", function() {
+              window.location.href = "http://localhost:8000/createreservation?id=" + id
+            })
+          } else if (document.cookie.length === 0) {
+            reservationButton.addEventListener("click", function() {
+              alert("Debe registrarse para realizar reservas")
+              window.location.href = "http://localhost:8000/register"
+
+            })
+          }
 
           const text =  document.createElement("p")        
           text.setAttribute("class","card-text")

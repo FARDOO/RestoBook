@@ -113,7 +113,6 @@ def get_reservations():
 @app.route('/reservation', methods=['POST'])
 def add_reservation():
     try:
-        print("estoy en post")
         data = request.json
         customer_name = data.get('customer_name')
         restaurant_id = data.get('restaurant_id')
@@ -121,9 +120,6 @@ def add_reservation():
         date = data.get('date')
         time_of_day = data.get('time_of_day')
 
-        print("Datos recibidos:", data)
-
-        
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
             return jsonify({'message': 'Restaurante no encontrado'}), 404
