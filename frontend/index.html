@@ -38,7 +38,7 @@
     </nav>
 
     <main>
-        <div id="restaurant_card" class="row row-cols-lg-5 g-lg-4 p-4">
+        <div id="restaurant_card" class="row row-cols-lg-5 g-lg-5 p-5">
         </div>
     </main>
 
@@ -126,12 +126,13 @@
                 const card_conteiner = document.createElement("div")
                 card_conteiner.setAttribute("class", "col")
                 card_conteiner.setAttribute("style", "width: 18rem;")
-                card_conteiner.setAttribute("style", "height: 24rem;")
+                card_conteiner.setAttribute("style", "height: 28rem;")
 
                 const card = document.createElement("div")
-                card.setAttribute("class", "card bg-light-subtle mx-auto")
+                card.setAttribute("class", "card margin-bottom bg-light-subtle mx-auto")
+                card.setAttribute("style", "height: 28rem;")
 
-                const image_conteiner = document.createElement("div")
+                const image_conteiner = document.createElement("image-box")
                 image_conteiner.setAttribute("class", "mt-2 mx-auto p-2 image-conteiner")
                 image_conteiner.setAttribute("style", "width: 16rem;")
                 image_conteiner.setAttribute("style", "height: 16rem;")
@@ -141,10 +142,10 @@
                 image.setAttribute("src", restaurant.image_url)
 
                 const card_body = document.createElement("div")
-                card_body.setAttribute("class", "card-body ")
+                card_body.setAttribute("class", "card-body position-relative ")
 
                 const title = document.createElement("h5")
-                title.setAttribute("class", "card-title p-2")
+                title.setAttribute("class", "card-title")
                 title.append(restaurant.name)
 
                 const button = document.createElement("a")
