@@ -149,7 +149,7 @@
                 title.append(restaurant.name)
 
                 const button = document.createElement("a")
-                const restaurant_id = "/restaurant?id=" + restaurant.id
+                const restaurant_id = "/restaurant?id=" + restaurant.id + "&" + "name=" + restaurant.name
                 button.setAttribute("href", restaurant_id)
                 button.setAttribute("class", "btn btn active")
                 button.append("Ver")

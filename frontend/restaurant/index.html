@@ -47,6 +47,7 @@
   <script>
     const param = new URLSearchParams(window.location.search)
     const restaurant_id = param.get("id")
+    const restaurant_name = param.get("name")
 
     if (restaurant_id === null) {
       window.location.href = "/"
@@ -119,7 +120,7 @@
 
           alert("Inicie sesion para realizar reservas.")
         } else {
-          window.location.href = "/createreservation/index.html";
+          window.location.href = "/createreservation?id=" + restaurant_id + "&name=" + restaurant_name;
         }
 
       });
