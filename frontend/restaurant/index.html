@@ -114,7 +114,14 @@
       reservationButton.setAttribute("class", "btn btn-outline-success");
       reservationButton.innerHTML = "Realizar Reserva";
       reservationButton.addEventListener("click", function () {
-        window.location.href = "/createreservation/index.html";
+
+        if (document.cookie.length === 0) {
+
+          alert("Inicie sesion para realizar reservas.")
+        } else {
+          window.location.href = "/createreservation/index.html";
+        }
+
       });
 
       const text = document.createElement("p")
