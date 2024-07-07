@@ -142,7 +142,7 @@
                 image.setAttribute("src", restaurant.image_url)
 
                 const card_body = document.createElement("div")
-                card_body.setAttribute("class", "card-body position-relative ")
+                card_body.setAttribute("class", "card-body d-grid text-right gap-5")
 
                 const title = document.createElement("h5")
                 title.setAttribute("class", "card-title")
@@ -151,7 +151,7 @@
                 const button = document.createElement("a")
                 const restaurant_id = "/restaurant?id=" + restaurant.id + "&" + "name=" + restaurant.name
                 button.setAttribute("href", restaurant_id)
-                button.setAttribute("class", "btn btn active")
+                button.setAttribute("class", "btn btn btn-outline-light col-5 mb-4 ")
                 button.append("Ver")
                 image_conteiner.append(image)
                 card_body.append(title)
