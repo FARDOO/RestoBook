@@ -193,7 +193,7 @@ def get_restaurant_by_id(id):
         return jsonify({'message' : 'server error'}), 500     
          
 @app.route('/reservations/<customer_id>', methods=['GET'])
-def get_reservations(customer_id):
+def get_reservations_for_customer_id(customer_id):
     try:
         reservations = Reservation.query.filter_by(customer_id=customer_id).all()
         reservations_data = []

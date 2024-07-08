@@ -25,7 +25,7 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          <a class="nav-link" href="#">Mis reservas</a>
+          <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
         </div>
       </div>
       <div id="session_btns" class="d-flex">
@@ -48,6 +48,20 @@
     const param = new URLSearchParams(window.location.search)
     const restaurant_id = param.get("id")
     const restaurant_name = param.get("name")
+
+    const reservations_btn = document.getElementById("reservations_btn")
+
+    reservations_btn.addEventListener("click", (event) => {
+
+      event.preventDefault()
+
+      if (document.cookie.length > 0) {
+        window.location.href = "/myreservations"
+      } else {
+        alert("inicie sesion para ver sus reservas.")
+        window.location.href = "/"
+      }
+    })
 
     if (restaurant_id === null) {
       window.location.href = "/"
