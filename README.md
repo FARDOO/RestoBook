@@ -1,12 +1,10 @@
 <h1>
   Resto Book - Sistema de Reservas en Restaurantes
 </h1>
-<br>  <br/>
 <div align="center">
     <img src="https://t4.ftcdn.net/jpg/02/94/26/33/360_F_294263329_1IgvqNgDbhmQNgDxkhlW433uOFuIDar4.jpg" title="Imagen de un Restaurant"
        style="width: 60vw; height: auto;" />
 </div>
-<br>  <br/>
  <h2> Contenido: </h2>
 
 - Descripcion
@@ -86,13 +84,20 @@ Resto Book es una aplicación web diseñada para facilitar la reserva de mesas e
 
 <h2> Direcciones: </h2>
 
-- Inicio (Me muestra el listado de todos los Restaurants): "/"
-- Restaurant (Me muestra informacion del Restaurant seleccionado): "/restauant/?id="id"&name="name""
-- Realizar Reserva (Form para realizar la reserva en el Restaurant previamente seleccionado): "/createreservation/?id="id"&name="name">
-- Ver mis reservas (Vemos las reservas a nuestro nombre): "/myreservations/
-- Modificar reservas (Modificamos la reserva seleccionada): "/updatereservation/?id="id""
-- Log in (Permite iniciar sesion): "/login/"
-- Registrarse (Permite crarnos un Usuario): "/register/"
+- Inicio (Me muestra el listado de todos los Restaurants):
+  "/"
+- Restaurant (Me muestra informacion del Restaurant seleccionado):
+  "/restauant/?id="id"&name="name""
+- Realizar Reserva (Form para realizar la reserva en el Restaurant previamente seleccionado):
+  "/createreservation/?id="id"&name="name">
+- Ver mis reservas (Vemos las reservas a nuestro nombre):
+  "/myreservations/
+- Modificar reservas (Modificamos la reserva seleccionada):
+  "/updatereservation/?id="id""
+- Log in (Permite iniciar sesion):
+  "/login/"
+- Registrarse (Permite crarnos un Usuario):
+  "/register/"
 
 
 
