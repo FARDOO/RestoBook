@@ -25,7 +25,7 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          <a class="nav-link" href="#">Mis reservas</a>
+          <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
         </div>
       </div>
       <div id="session_btns" class="d-flex">
@@ -48,14 +48,29 @@
     const param = new URLSearchParams(window.location.search)
     const restaurant_id = param.get("id")
     const restaurant_name = param.get("name")
+    var user_id = ""
+    var user_name = ""
+    user_is_login()
+    const reservations_btn = document.getElementById("reservations_btn")
+
+    reservations_btn.addEventListener("click", (event) => {
+
+      event.preventDefault()
+
+      if (document.cookie.length > 0) {
+        window.location.href = "/myreservations"
+      } else {
+        alert("inicie sesion para ver sus reservas.")
+        window.location.href = "/"
+      }
+    })
 
     if (restaurant_id === null) {
       window.location.href = "/"
     }
 
-    var user_id = ""
-    var user_name = ""
-    user_is_login()
+
+
     function get_cookie(name) {
       const cookieValue = document.cookie
         .split('; ')
@@ -138,10 +153,10 @@
         subtitle.append(" Disponible para cenar y almorzar ")
       }
       else if (restaurant.lunch) {
-        subtitle.append(" Disponible unicamente para cenar ")
+        subtitle.append(" Disponible unicamente para almorzar ")
       }
       else if (restaurant.dinner) {
-        subtitle.append(" Disponible unicamente para almorzar ")
+        subtitle.append(" Disponible unicamente para cenar ")
       }
 
       card_body.append(title)
@@ -155,10 +170,16 @@
       container.append(car_row)
     }
 
+    //se usa para carrer sesion, borra las cookies
+    function delete_cookie(name) {
+      document.cookie = name + '=; Max-Age=-99999999; path=/';
+    }
+
+
     function log_out() {
       //elimina cookies
-      document.cookie = "name" + '=; Max-Age=-99999999;'
-      document.cookie = "id" + '=; Max-Age=-99999999;'
+      delete_cookie("name")
+      delete_cookie("id")
       //setteo boton cerrar sesion como iniciar sesion
       const session = document.getElementById("session_btn")
       session.removeEventListener("click", log_out)
@@ -196,10 +217,6 @@
 
       }
 
-    }
-
-    function response_received(response) {
-      return response.json()
     }
 
     function request_error(error) {

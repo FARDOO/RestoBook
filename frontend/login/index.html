@@ -91,13 +91,9 @@
       } else if (content.login_p === "false") {
         alert("La contraseña ingresada es incorrecta")
       } else {
-        console.log("login")
-        console.log("coontent: ", content)
-        console.log(content.name)
         const cookie = "id = " + content.id + ' ; ' + "name = " + content.name + ' ; '
         document.cookie = "id =" + content.id + "; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
         document.cookie = "name = " + content.name + "; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
-        console.log(cookie)
         location.href = "/"
       }
     }

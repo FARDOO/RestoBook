@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" aria-current="page" href="/">Inicio</a>
-                    <a class="nav-link" href="#">Mis reservas</a>
+                    <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
                 </div>
             </div>
 
@@ -45,6 +45,21 @@
     <script>
         var user_id = ""
         var user_name = ""
+
+        const reservations_btn = document.getElementById("reservations_btn")
+
+        reservations_btn.addEventListener("click", (event) => {
+
+            event.preventDefault()
+
+            if (document.cookie.length > 0) {
+                window.location.href = "/myreservations"
+            } else {
+                alert("inicie sesion para ver sus reservas.")
+                window.location.href = "/"
+            }
+        })
+
 
         function get_cookie(name) {
             const cookieValue = document.cookie
@@ -96,6 +111,7 @@
                 session.append("Cerrar sesion")
                 session.setAttribute("class", "btn btn-outline-danger")
                 session.addEventListener("click", log_out, true);
+
             } else if (document.cookie.length === 0) {
                 const session = document.getElementById("session_btn")
                 session.removeEventListener("click", log_out)
@@ -121,7 +137,7 @@
         function parse_data(content) {
 
             content.forEach(restaurant => {
-                const container = document.getElementById("restaurant_card") // Se podria poner por fuera del forEach asi se hace solo una vez ???
+                const container = document.getElementById("restaurant_card")
 
                 const card_conteiner = document.createElement("div")
                 card_conteiner.setAttribute("class", "col")

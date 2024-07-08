@@ -4,7 +4,7 @@ from flask import request
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import db, Restaurant, Reservation, Customer  # Asegúrate de importar db correctamente
+from models import db, Restaurant, Reservation, Customer  
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
@@ -36,10 +36,8 @@ def home():
 @app.route('/customers', methods=['GET'])
 def get_customers():
     try:
-        print("estoy en customers")
         return jsonify({'message' : 'estoy en customers'}),200
     except Exception as error:
-        print("error: ", error)
         return jsonify({'message': 'server error'}), 500
     
 @app.route('/login', methods=['POST'])
@@ -76,9 +74,7 @@ def login():
 @app.route('/customer', methods=['POST'])
 def add_customer():
     try:       
-        print(request.json)        
         data = request.json
-        print(request.json)
         name = data.get('name')
         password = data.get('password')
         email = data.get('email')
@@ -122,35 +118,6 @@ def add_customer():
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
     
-"""
-@app.route('/customer/validation/<name>', methods=['GET'])
-def name_exists(name):
-    try:
-        customer = Customer.query.filter_by(name=name).first()
-        if not customer:
-            return jsonify({'exists': 'false'})        
-        else:
-            return jsonify({'exists': 'true'}) 
-        
-    except Exception as error:
-        print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500
-"""        
-    
-"""
-@app.route('/customer/validation/<email>', methods=['GET'])
-def email_exists(email):
-    try:
-        customer = Customer.query.filter_by(email=email).first()
-        if not customer:
-            return jsonify({'exists': 'false'})        
-        else:
-            return jsonify({'exists': 'true'}) 
-        
-    except Exception as error:
-        print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500        
-"""
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -185,13 +152,95 @@ def get_restaurant_by_id(id):
 
             'image_url' : restaurant.image_url
         }     
- 
-            
-
         return jsonify(restaurant_data), 201
     except Exception as error:
-        return jsonify({'message' : 'server error'}), 500     
+        return jsonify({'message' : 'server error'}), 500  
+       
          
+@app.route('/updatereservation/<id>', methods=['PUT'])
+def update_reservation(id):
+    data = request.get_json()  
+    reservation = Reservation.query.get(id)  
+    try:
+       
+        restaurant_id = reservation.restaurant_id 
+        restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
+
+
+        diners = int(data.get('diners'))
+        date = data.get('date')
+        capacity = restaurant.capacity
+        
+        reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=data['date']).all()
+       
+        total_diners = sum(reservation.diners for reservation in reservations)
+        if str(reservation.date) == str(date):
+            total_diners = total_diners - reservation.diners
+
+        if total_diners + int(diners) > capacity:
+            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False }), 400
+        elif data['time_of_day'] == 'lunch' and not restaurant.lunch:
+            return jsonify({'message': 'Este restaurante no sirve almuerzo', 'exitoso': False}), 400
+        elif data['time_of_day'] == 'dinner' and not restaurant.dinner:
+            return jsonify({'message': 'Este restaurante no sirve cena', 'exitoso': False}), 400
+        
+        reservation.date = data['date']
+        reservation.diners = data['diners']
+        reservation.time_of_day = data['time_of_day']
+
+        db.session.commit() 
+        return jsonify({'message': 'Reserva actualizada con exito', 'exitoso': True}), 200
+    except Exception as e:
+        db.session.rollback()  
+        return jsonify({'message': 'server error', 'exitoso': False}), 500 
+
+
+@app.route('/reservation/<id>', methods=['GET'])
+def get_reservation_by_id(id):
+    try:
+        reservation = Reservation.query.get(id)
+        restaurant_id = reservation.restaurant_id
+        restaurant = Restaurant.query.get(restaurant_id)
+
+        reservation_data = {
+            'id' : reservation.id,
+            'customer_id' : reservation.customer_id,
+            'restaurant_id' : restaurant_id,
+            'restaurant_name' : restaurant.name,
+            'diners' : reservation.diners,
+            'date' : reservation.date.strftime('%Y-%m-%d'),
+            'time_of_day' : reservation.time_of_day,
+        }     
+        return jsonify(reservation_data), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500   
+    
+
+@app.route('/reservations/<customer_id>', methods=['GET'])
+def get_reservations_for_customer_id(customer_id):
+    try:
+        reservations = Reservation.query.filter_by(customer_id=customer_id).all()
+        reservations_data = []
+
+        if not reservations:
+            return jsonify(reservations_data), 201   
+           
+        for reservation in reservations:
+            restaurant = Restaurant.query.get(reservation.restaurant_id) 
+            reservation_data = {
+                'id' : reservation.id,
+                'customer_id' : reservation.customer_id,
+                'restaurant_id' : reservation.restaurant_id,
+                'restaurant_name' : restaurant.name,
+                'diners' : reservation.diners,
+                'date' : reservation.date.strftime('%Y-%m-%d'),
+                'time_of_day' : reservation.time_of_day,
+            }
+            reservations_data.append(reservation_data)
+        return jsonify(reservations_data), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500 
+
 
 @app.route('/reservations', methods=['GET'])
 def get_reservations():
@@ -225,48 +274,53 @@ def add_reservation():
 
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
-            print("1")
-            return jsonify({'message': 'Restaurante no encontrado'}), 404
+            return jsonify({'message': 'Restaurante no encontrado', 'exitoso': True}), 404
         
         customer = Customer.query.filter_by(name=customer_name).first()
         if not customer:
-            print("2")
-            return jsonify({'message': 'Cliente no resgistrado, por favor registrese'}), 404
+            return jsonify({'message': 'Cliente no resgistrado, por favor registrese', 'exitoso': True}), 404
         
         customer_id = customer.id
 
         if not all([customer_id, restaurant_id, diners, date, time_of_day]):
-            print("3")
             return jsonify({'message' : 'error request'}), 400
-        print("A")
         capacity = restaurant.capacity
-        print("B")
         reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
-        print("C")
         total_diners = sum(reservation.diners for reservation in reservations)
-        print("D")
         if total_diners + int(diners) > capacity:
-            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha'}), 400
+            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False}), 400
         elif time_of_day == 'lunch' and not restaurant.lunch:
-            return jsonify({'message': 'Este restaurante no sirve almuerzo'}), 400
+            return jsonify({'message': 'Este restaurante no sirve almuerzo', 'exitoso': False}), 400
         elif time_of_day == 'dinner' and not restaurant.dinner:
-            return jsonify({'message': 'Este restaurante no sirve cena'}), 400
-        print("E")
+            return jsonify({'message': 'Este restaurante no sirve cena', 'exitoso': False}), 400
         new_reservation = Reservation(customer_id = customer_id, restaurant_id = restaurant_id,
                                       diners = diners, date = date, time_of_day = time_of_day)
-        print("F")
         db.session.add(new_reservation)
-        print("G")
         db.session.commit()
-        print("H")
 
         return jsonify({
-            'message': 'Reserva creada exitosamente',
+            'message': 'Reserva creada exitosamente', 'exitoso': True
         }), 201
     
     except Exception as error:
         print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500     
+        return jsonify({'message' : 'server error', 'exitoso': False}), 500     
+
+
+@app.route('/deletereservation/<id>', methods=['DELETE'])
+def delete_reservation(id):
+    reservation = Reservation.query.get(id)
+
+    if not reservation:
+        return jsonify({'message': 'No existe reservacion'}), 201
+    
+    try:
+        db.session.delete(reservation)
+        db.session.commit()
+        return jsonify({'message': 'reservacion borrada'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'error'}), 500
 
 
 if __name__ == '__main__':
