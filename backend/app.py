@@ -203,16 +203,20 @@ def update_reservation(id):
 
         diners = int(data.get('diners'))
         date = data.get('date')
-        print("date",date)
+        print("date:",date)
         capacity = restaurant.capacity
         
-        reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
+        reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=data['date']).all()
        
         total_diners = sum(reservation.diners for reservation in reservations)
         print("comensales totales en el dia: ",total_diners)
         print("nuevo comensales: ",data['diners'])
         print("comensales pre update: ",reservation.diners)
-        total_diners = total_diners - reservation.diners
+        print("fecha pre update: ",reservation.date)
+        print("fecha update: ",date)
+        if str(reservation.date) == str(date):
+            print("las fechas son iguales ")
+            total_diners = total_diners - reservation.diners
         print("total: ",total_diners)
 
         if total_diners + int(diners) > capacity:
