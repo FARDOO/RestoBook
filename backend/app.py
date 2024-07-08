@@ -4,7 +4,7 @@ from flask import request
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import db, Restaurant, Reservation, Customer  # Asegúrate de importar db correctamente
+from models import db, Restaurant, Reservation, Customer  
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
@@ -36,10 +36,8 @@ def home():
 @app.route('/customers', methods=['GET'])
 def get_customers():
     try:
-        print("estoy en customers")
         return jsonify({'message' : 'estoy en customers'}),200
     except Exception as error:
-        print("error: ", error)
         return jsonify({'message': 'server error'}), 500
     
 @app.route('/login', methods=['POST'])
@@ -76,9 +74,7 @@ def login():
 @app.route('/customer', methods=['POST'])
 def add_customer():
     try:       
-        print(request.json)        
         data = request.json
-        print(request.json)
         name = data.get('name')
         password = data.get('password')
         email = data.get('email')
@@ -122,35 +118,6 @@ def add_customer():
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
     
-"""
-@app.route('/customer/validation/<name>', methods=['GET'])
-def name_exists(name):
-    try:
-        customer = Customer.query.filter_by(name=name).first()
-        if not customer:
-            return jsonify({'exists': 'false'})        
-        else:
-            return jsonify({'exists': 'true'}) 
-        
-    except Exception as error:
-        print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500
-"""        
-    
-"""
-@app.route('/customer/validation/<email>', methods=['GET'])
-def email_exists(email):
-    try:
-        customer = Customer.query.filter_by(email=email).first()
-        if not customer:
-            return jsonify({'exists': 'false'})        
-        else:
-            return jsonify({'exists': 'true'}) 
-        
-    except Exception as error:
-        print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500        
-"""
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
@@ -193,7 +160,6 @@ def get_restaurant_by_id(id):
 @app.route('/updatereservation/<id>', methods=['PUT'])
 def update_reservation(id):
     data = request.get_json()  
-    print(data)
     reservation = Reservation.query.get(id)  
     try:
        
@@ -203,21 +169,13 @@ def update_reservation(id):
 
         diners = int(data.get('diners'))
         date = data.get('date')
-        print("date:",date)
         capacity = restaurant.capacity
         
         reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=data['date']).all()
        
         total_diners = sum(reservation.diners for reservation in reservations)
-        print("comensales totales en el dia: ",total_diners)
-        print("nuevo comensales: ",data['diners'])
-        print("comensales pre update: ",reservation.diners)
-        print("fecha pre update: ",reservation.date)
-        print("fecha update: ",date)
         if str(reservation.date) == str(date):
-            print("las fechas son iguales ")
             total_diners = total_diners - reservation.diners
-        print("total: ",total_diners)
 
         if total_diners + int(diners) > capacity:
             return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False }), 400
@@ -235,7 +193,6 @@ def update_reservation(id):
     except Exception as e:
         db.session.rollback()  
         return jsonify({'message': 'server error', 'exitoso': False}), 500 
-
 
 
 @app.route('/reservation/<id>', methods=['GET'])
@@ -269,9 +226,7 @@ def get_reservations_for_customer_id(customer_id):
             return jsonify(reservations_data), 201   
            
         for reservation in reservations:
-            print("hola")
             restaurant = Restaurant.query.get(reservation.restaurant_id) 
-            print("hola?")
             reservation_data = {
                 'id' : reservation.id,
                 'customer_id' : reservation.customer_id,
@@ -319,40 +274,29 @@ def add_reservation():
 
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
-            print("1")
             return jsonify({'message': 'Restaurante no encontrado', 'exitoso': True}), 404
         
         customer = Customer.query.filter_by(name=customer_name).first()
         if not customer:
-            print("2")
             return jsonify({'message': 'Cliente no resgistrado, por favor registrese', 'exitoso': True}), 404
         
         customer_id = customer.id
 
         if not all([customer_id, restaurant_id, diners, date, time_of_day]):
-            print("3")
             return jsonify({'message' : 'error request'}), 400
-        print("A")
         capacity = restaurant.capacity
-        print("B")
         reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
-        print("C")
         total_diners = sum(reservation.diners for reservation in reservations)
-        print("D")
         if total_diners + int(diners) > capacity:
             return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False}), 400
         elif time_of_day == 'lunch' and not restaurant.lunch:
             return jsonify({'message': 'Este restaurante no sirve almuerzo', 'exitoso': False}), 400
         elif time_of_day == 'dinner' and not restaurant.dinner:
             return jsonify({'message': 'Este restaurante no sirve cena', 'exitoso': False}), 400
-        print("E")
         new_reservation = Reservation(customer_id = customer_id, restaurant_id = restaurant_id,
                                       diners = diners, date = date, time_of_day = time_of_day)
-        print("F")
         db.session.add(new_reservation)
-        print("G")
         db.session.commit()
-        print("H")
 
         return jsonify({
             'message': 'Reserva creada exitosamente', 'exitoso': True
