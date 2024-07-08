@@ -248,7 +248,7 @@ def get_reservations_for_customer_id(customer_id):
                 'restaurant_id' : reservation.restaurant_id,
                 'restaurant_name' : restaurant.name,
                 'diners' : reservation.diners,
-                'date' : reservation.date,
+                'date' : reservation.date.strftime('%Y-%m-%d'),
                 'time_of_day' : reservation.time_of_day,
             }
             reservations_data.append(reservation_data)
