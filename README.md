@@ -10,8 +10,7 @@
 - Integrantes
 - Estructura de la Base de Datos
 - Endpoints
-- Code Structure
-- License
+- Direcciones
 
 <h2> Descripcion </h2>
 
