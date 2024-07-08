@@ -48,7 +48,9 @@
     const param = new URLSearchParams(window.location.search)
     const restaurant_id = param.get("id")
     const restaurant_name = param.get("name")
-
+    var user_id = ""
+    var user_name = ""
+    user_is_login()
     const reservations_btn = document.getElementById("reservations_btn")
 
     reservations_btn.addEventListener("click", (event) => {
@@ -67,9 +69,8 @@
       window.location.href = "/"
     }
 
-    var user_id = ""
-    var user_name = ""
-    user_is_login()
+
+
     function get_cookie(name) {
       const cookieValue = document.cookie
         .split('; ')
@@ -169,10 +170,16 @@
       container.append(car_row)
     }
 
+    //se usa para carrer sesion, borra las cookies
+    function delete_cookie(name) {
+      document.cookie = name + '=; Max-Age=-99999999; path=/';
+    }
+
+
     function log_out() {
       //elimina cookies
-      document.cookie = "name" + '=; Max-Age=-99999999;'
-      document.cookie = "id" + '=; Max-Age=-99999999;'
+      delete_cookie("name")
+      delete_cookie("id")
       //setteo boton cerrar sesion como iniciar sesion
       const session = document.getElementById("session_btn")
       session.removeEventListener("click", log_out)

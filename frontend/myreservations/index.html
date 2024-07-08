@@ -43,9 +43,14 @@
     </main>
     <script>
 
+        if (document.cookie.length === 0) {
+            window.location.href = "/"
+        }
+
         var user_id = ""
         var user_name = ""
         user_is_login()
+
         function get_cookie(name) {
             const cookieValue = document.cookie
                 .split('; ')
@@ -62,6 +67,7 @@
             event.preventDefault()
 
             if (document.cookie.length > 0) {
+
                 window.location.href = "/myreservations"
             } else {
                 alert("inicie sesion para ver sus reservas.")
@@ -88,11 +94,16 @@
                 window.location.href = "/"
             }
         }
+        //se usa para carrer sesion, borra las cookies
+        function delete_cookie(name) {
+            document.cookie = name + '=; Max-Age=-99999999; path=/';
+        }
+
 
         function log_out() {
             //elimina cookies
-            document.cookie = "name" + '=; Max-Age=-99999999;'
-            document.cookie = "id" + '=; Max-Age=-99999999;'
+            delete_cookie("name")
+            delete_cookie("id")
             //setteo boton cerrar sesion como iniciar sesion
             const session = document.getElementById("session_btn")
             session.removeEventListener("click", log_out)
