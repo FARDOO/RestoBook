@@ -294,6 +294,21 @@ def add_reservation():
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
 
+@app.route('/deletereservation/<id>', methods=['DELETE'])
+def delete_reservation(id):
+    reservation = Reservation.query.get(id)
+
+    if not reservation:
+        return jsonify({'message': 'No existe reservacion'}), 201
+    
+    try:
+        db.session.delete(reservation)
+        db.session.commit()
+        return jsonify({'message': 'reservacion borrada'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': 'error'}), 500
+
 
 if __name__ == '__main__':
     print('Starting Server...')
