@@ -219,7 +219,7 @@ def get_reservation_by_id(id):
 @app.route('/reservations/<customer_id>', methods=['GET'])
 def get_reservations_for_customer_id(customer_id):
     try:
-        reservations = Reservation.query.filter_by(customer_id=customer_id).all()
+        reservations = Reservation.query.filter_by(customer_id=customer_id).order_by(Reservation.date.asc()).all()
         reservations_data = []
 
         if not reservations:
