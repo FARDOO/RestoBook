@@ -149,7 +149,6 @@
         }
 
         function parse_delete(content) {
-            console.log(content)
             alert(content.message)
             window.location.href = "/myreservations"
         }
@@ -160,7 +159,6 @@
 
         function delete_reservation(event) {
             event.preventDefault()
-            console.log(event.target.value)
 
             let url = 'http://127.0.0.1:5000//deletereservation/' + event.target.value
             fetch(url, { method: 'DELETE' })
@@ -172,11 +170,8 @@
 
         function update_reservation(event) {
             event.preventDefault()
-            console.log(event.target.value)
             const url_reservation_id = "/updatereservation?id=" + event.target.value
-            console.log("url: ", url_reservation_id)
             window.location.href = url_reservation_id
-            //button.setAttribute("href", restaurant_id)
         }
 
         function parse_data(content) {
@@ -190,11 +185,11 @@
                 title.append("No tiene reservas generadas")
                 container.append(title)
             } else {
-                container.setAttribute("class", " p-5")
+                container.setAttribute("class", " row justify-content-center align-items-center p-5")
                 content.forEach(reservation => {
 
                     const card = document.createElement("div")
-                    card.setAttribute("class", "card mb-3")
+                    card.setAttribute("class", "card col-8 mb-3")
 
                     const card_header = document.createElement("h5")
                     card_header.setAttribute("class", "card-header")
@@ -251,10 +246,8 @@
                     card.append(card_body)
                     container.append(card)
 
-
                 })
             }
-            console.log(content)
         }
 
         function request_error(error) {

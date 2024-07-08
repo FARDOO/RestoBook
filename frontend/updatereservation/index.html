@@ -150,7 +150,6 @@
 
         function user_is_login() {
             if (document.cookie.length > 0) {
-                console.log("hola!!!!")
                 //guardo las cookies
                 user_id = get_cookie('id');
                 user_name = get_cookie('name');
@@ -234,7 +233,7 @@
             function parse_data_reservation(data) {
                 alert(data.message)
                 if (data.exitoso) {
-                    window.location.href = "/"
+                    window.location.href = "/myreservations"
                 }
             }
 

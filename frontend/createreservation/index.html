@@ -120,14 +120,6 @@
         var user_name = ""
         user_is_login()
 
-        //const select = document.getElementById("restaurant_option")
-        //const option = document.createElement("option")
-        //option.setAttribute("value", restaurant_id)
-        //option.textContent = restaurant_name
-        //select.append(option);
-        console.log("restaurant_id: ", restaurant_id)
-        console.log("restaurant_name: ", restaurant_name)
-
         function get_cookie(name) {
             const cookieValue = document.cookie
                 .split('; ')
@@ -166,7 +158,6 @@
 
         function user_is_login() {
             if (document.cookie.length > 0) {
-                console.log("hola!!!!")
                 //guardo las cookies
                 user_id = get_cookie('id');
                 user_name = get_cookie('name');
