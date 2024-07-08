@@ -185,13 +185,50 @@ def get_restaurant_by_id(id):
 
             'image_url' : restaurant.image_url
         }     
- 
-            
-
         return jsonify(restaurant_data), 201
     except Exception as error:
-        return jsonify({'message' : 'server error'}), 500     
+        return jsonify({'message' : 'server error'}), 500  
+       
          
+@app.route('/updatereservation/<id>', methods=['PUT'])
+def update_reservation(id):
+    data = request.get_json()  
+    print(data)
+    reservation = Reservation.query.get(id)  
+    try:
+        reservation.date = data['date']
+        reservation.diners = data['diners']
+        reservation.time_of_day = data['time_of_day']
+        
+        db.session.commit() 
+        return jsonify({'message': 'Reserva actualizada con exito'}), 200
+    except Exception as e:
+        db.session.rollback()  
+        return jsonify({'message': 'server error'}), 500 
+
+
+
+@app.route('/reservation/<id>', methods=['GET'])
+def get_reservation_by_id(id):
+    try:
+        reservation = Reservation.query.get(id)
+        restaurant_id = reservation.restaurant_id
+        restaurant = Restaurant.query.get(restaurant_id)
+
+        reservation_data = {
+            'id' : reservation.id,
+            'customer_id' : reservation.customer_id,
+            'restaurant_id' : restaurant_id,
+            'restaurant_name' : restaurant.name,
+            'diners' : reservation.diners,
+            'date' : reservation.date.strftime('%Y-%m-%d'),
+            'time_of_day' : reservation.time_of_day,
+        }     
+        return jsonify(reservation_data), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500   
+    
+
 @app.route('/reservations/<customer_id>', methods=['GET'])
 def get_reservations_for_customer_id(customer_id):
     try:
@@ -218,6 +255,7 @@ def get_reservations_for_customer_id(customer_id):
         return jsonify(reservations_data), 201
     except Exception as error:
         return jsonify({'message' : 'server error'}), 500 
+
 
 @app.route('/reservations', methods=['GET'])
 def get_reservations():
@@ -293,6 +331,7 @@ def add_reservation():
     except Exception as error:
         print("error: ", error)
         return jsonify({'message' : 'server error'}), 500     
+
 
 @app.route('/deletereservation/<id>', methods=['DELETE'])
 def delete_reservation(id):

@@ -40,8 +40,8 @@
     </nav>
 
     <div class="container">
-        <h2 class="my- text-center" id="title"></h2>
-        <h5 class="text-center">Por favor, complete los campos</h5>
+        <h3 class="my- text-center" id="title"></h3>
+        <h5 class="text-center">Actualice su reserva</h5>
         <form id="reservation" class="reservation_form">
             <input type="hidden" id="restaurant_id" name="restaurant_id">
             <input type="hidden" id="user_name" name="customer_name">
@@ -50,8 +50,7 @@
                 <div class="col-md-6">
 
                     <label for="diners" class="form-label">Cantidad de Comensales:</label>
-                    <input type="number" class="form-control" id="diners" name="diners" min="1" max="25"
-                        placeholder="Ingresa la cantidad de comensales" required>
+                    <input type="number" class="form-control" id="diners" name="diners" min="1" max="25" required>
                 </div>
                 <div class="col-md-6">
                     <label for="date" class="form-label">Fecha de Reserva:</label>
@@ -62,15 +61,8 @@
                 <div class="col-md-6">
                     <label for="time_option" class="form-label">Hora de Reserva:</label>
                     <select class="form-select" name="time_of_day" id="time_option" required>
-                        <option disabled selected>Hora</option>
-                        <option value="lunch">12:00 A.M.</option>
-                        <option value="lunch">12:30 A.M.</option>
-                        <option value="lunch">13:00 A.M.</option>
-                        <option value="lunch">13:30 A.M.</option>
-                        <option value="dinner">21:00 P.M.</option>
-                        <option value="dinner">21:30 P.M.</option>
-                        <option value="dinner">22:00 P.M.</option>
-                        <option value="dinner">22:30 P.M.</option>
+                        <option value="lunch">Almuerzo</option>
+                        <option value="dinner">Cena</option>
                     </select>
                 </div>
             </div>
@@ -82,13 +74,14 @@
             </div>
             <div class="row mb-3">
                 <div class="col-12 text-center">
-                    <button type="submit" id="submit_button" class="btn btn-outline-success">Enviar Reserva</button>
+                    <button type="submit" id="update_button" class="btn btn-outline-success">Actualizar Reserva</button>
                 </div>
             </div>
         </form>
     </div>
 
     <script>
+
 
         const reservations_btn = document.getElementById("reservations_btn")
 
@@ -106,8 +99,7 @@
 
         //Recivo por medio de la url como parametro el id y nombre del restaurante seleccionado
         const param = new URLSearchParams(window.location.search)
-        const restaurant_id = param.get("id")
-        const restaurant_name = param.get("name")
+        const reservation_id = param.get("id")
 
         //veo si la cookie que se creo para guardar la informacion del usuario logueado existe
         if (document.cookie.length === 0) {
@@ -119,13 +111,6 @@
         var user_name = ""
         user_is_login()
 
-        //const select = document.getElementById("restaurant_option")
-        //const option = document.createElement("option")
-        //option.setAttribute("value", restaurant_id)
-        //option.textContent = restaurant_name
-        //select.append(option);
-        console.log("restaurant_id: ", restaurant_id)
-        console.log("restaurant_name: ", restaurant_name)
 
         function get_cookie(name) {
             const cookieValue = document.cookie
@@ -196,13 +181,47 @@
 
         }
 
-        const title = document.getElementById("title")
-        title.setAttribute("class", "text-center")
-        title.textContent = "Esta realizando una reserva en el Restaurant " + restaurant_name
-
-        document.getElementById('restaurant_id').value = restaurant_id;
         document.getElementById('user_name').value = user_name;
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const dateInput = document.getElementById('date');
+            dateInput.setAttribute('min', formattedDate);
+        });
+
+        function response_received(response) {
+            return response.json()
+        }
+
+        function parse_data(reservation) {
+            const title = document.getElementById("title")
+            title.setAttribute("class", "text-center")
+            title.textContent = "Esta actualizando una reserva en el Restaurant " + reservation.restaurant_name
+
+            document.getElementById('restaurant_id').value = reservation.restaurant_id;
+            const select_element = document.getElementById('time_option');
+            const options = select_element.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === reservation.time_of_day) {
+                    options[i].selected = true;
+                }
+            }
+            document.getElementById('diners').value = reservation.diners
+            document.getElementById('date').value = reservation.date
+        }
+
+        function request_error(error) {
+            console.log("ERROR")
+            console.log(error)
+        }
+
+
+        let url = "http://127.0.0.1:5000/reservation/" + reservation_id
+        fetch(url)
+            .then(response_received)
+            .then(parse_data)
+            .catch(request_error)
 
 
         function submit_form(event) {
@@ -214,7 +233,7 @@
 
             function parse_data_reservation(data) {
                 alert(data.message)
-                window.location.href = 'http://localhost:8000/index.html'
+                //   window.location.href = 'http://localhost:8000/index.html'
             }
 
             function submit_error_reservation(error) {
@@ -226,13 +245,13 @@
             console.log(Object.fromEntries(form))
 
 
-            let url = 'http://127.0.0.1:5000/reservation'
+            let url = 'http://127.0.0.1:5000/updatereservation/' + reservation_id
             fetch(url, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(Object.fromEntries(form)) // Convertir los datos a JSON
+                body: JSON.stringify(Object.fromEntries(form))
             })
                 .then(response_received_reservation)
                 .then(parse_data_reservation)

@@ -162,7 +162,7 @@
         function update_reservation(event) {
             event.preventDefault()
             console.log(event.target.value)
-            const url_reservation_id = "/reservation?id=" + event.target.value
+            const url_reservation_id = "/updatereservation?id=" + event.target.value
             console.log("url: ", url_reservation_id)
             window.location.href = url_reservation_id
             //button.setAttribute("href", restaurant_id)
