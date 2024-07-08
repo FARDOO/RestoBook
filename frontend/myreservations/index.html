@@ -180,70 +180,80 @@
         }
 
         function parse_data(content) {
+
+
             const container = document.getElementById("reservation_card_container")
-            container.setAttribute("class", " p-5")
-            content.forEach(reservation => {
 
-                const card = document.createElement("div")
-                card.setAttribute("class", "card mb-3")
+            if (content.length == 0) {
+                const title = document.createElement("h2")
+                title.setAttribute("class", "text-center")
+                title.append("No tiene reservas generadas")
+                container.append(title)
+            } else {
+                container.setAttribute("class", " p-5")
+                content.forEach(reservation => {
 
-                const card_header = document.createElement("h5")
-                card_header.setAttribute("class", "card-header")
-                card_header.append(reservation.restaurant_name)
+                    const card = document.createElement("div")
+                    card.setAttribute("class", "card mb-3")
 
-                const card_body = document.createElement("div")
-                card_body.setAttribute("class", "card-body")
+                    const card_header = document.createElement("h5")
+                    card_header.setAttribute("class", "card-header")
+                    card_header.append(reservation.restaurant_name)
 
-                const p_fecha = document.createElement("p")
-                p_fecha.setAttribute("class", "card-text")
-                console.log(reservation.date)
-                p_fecha.append("Dia de reserva:   " + reservation.date)
+                    const card_body = document.createElement("div")
+                    card_body.setAttribute("class", "card-body")
 
-                const p_comensales = document.createElement("p")
-                p_comensales.setAttribute("class", "card-text")
-                p_comensales.append("Numero de comensales:   " + reservation.diners)
+                    const p_fecha = document.createElement("p")
+                    p_fecha.setAttribute("class", "card-text")
+                    console.log(reservation.date)
+                    p_fecha.append("Dia de reserva:   " + reservation.date)
 
-                const p_timeo_of_day = document.createElement("p")
-                p_timeo_of_day.setAttribute("class", "card-text")
+                    const p_comensales = document.createElement("p")
+                    p_comensales.setAttribute("class", "card-text")
+                    p_comensales.append("Numero de comensales:   " + reservation.diners)
 
-                let reservation_time_of_day = ""
+                    const p_timeo_of_day = document.createElement("p")
+                    p_timeo_of_day.setAttribute("class", "card-text")
 
-                if (reservation.time_of_day === "lunch") {
-                    reservation_time_of_day = "Almuerzo"
-                } else {
-                    reservation_time_of_day = "Cena"
-                }
-                p_timeo_of_day.append("Momento del dia:   " + reservation_time_of_day)
+                    let reservation_time_of_day = ""
 
-                const btn_conteiner = document.createElement("div")
-                btn_conteiner.setAttribute("class", "d-grid gap-2 d-md-flex justify-content-md-end")
+                    if (reservation.time_of_day === "lunch") {
+                        reservation_time_of_day = "Almuerzo"
+                    } else {
+                        reservation_time_of_day = "Cena"
+                    }
+                    p_timeo_of_day.append("Momento del dia:   " + reservation_time_of_day)
 
-                const btn_delete = document.createElement("button")
-                btn_delete.setAttribute("class", "btn btn btn-outline-danger - md - 2")
-                btn_delete.setAttribute("value", reservation.id)
-                btn_delete.append("Cancelar")
-                btn_delete.addEventListener('click', delete_reservation)
+                    const btn_conteiner = document.createElement("div")
+                    btn_conteiner.setAttribute("class", "d-grid gap-2 d-md-flex justify-content-md-end")
 
-                const btn_update = document.createElement("button")
-                btn_update.setAttribute("class", "btn btn btn-outline-warning")
-                btn_update.setAttribute("value", reservation.id)
-                btn_update.append("Modificar")
-                btn_conteiner.append(btn_update)
-                btn_conteiner.append(btn_delete)
+                    const btn_delete = document.createElement("button")
+                    btn_delete.setAttribute("class", "btn btn btn-outline-danger - md - 2")
+                    btn_delete.setAttribute("value", reservation.id)
+                    btn_delete.append("Cancelar")
+                    btn_delete.addEventListener('click', delete_reservation)
 
-
-                btn_update.addEventListener('click', update_reservation)
-
-                card.append(card_header)
-                card_body.append(p_fecha)
-                card_body.append(p_comensales)
-                card_body.append(p_timeo_of_day)
-                card_body.append(btn_conteiner)
-                card.append(card_body)
-                container.append(card)
+                    const btn_update = document.createElement("button")
+                    btn_update.setAttribute("class", "btn btn btn-outline-warning")
+                    btn_update.setAttribute("value", reservation.id)
+                    btn_update.append("Modificar")
+                    btn_conteiner.append(btn_update)
+                    btn_conteiner.append(btn_delete)
 
 
-            })
+                    btn_update.addEventListener('click', update_reservation)
+
+                    card.append(card_header)
+                    card_body.append(p_fecha)
+                    card_body.append(p_comensales)
+                    card_body.append(p_timeo_of_day)
+                    card_body.append(btn_conteiner)
+                    card.append(card_body)
+                    container.append(card)
+
+
+                })
+            }
             console.log(content)
         }
 
