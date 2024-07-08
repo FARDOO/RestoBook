@@ -113,6 +113,13 @@
             }
         })
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const dateInput = document.getElementById('date');
+            dateInput.setAttribute('min', formattedDate);
+        });
+
         //Recivo por medio de la url como parametro el id y nombre del restaurante seleccionado
         const param = new URLSearchParams(window.location.search)
         const restaurant_id = param.get("id")

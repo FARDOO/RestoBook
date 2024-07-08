@@ -186,15 +186,23 @@
                 const p_fecha = document.createElement("p")
                 p_fecha.setAttribute("class", "card-text")
                 console.log(reservation.date)
-                p_fecha.append("Dia de reserva: " + reservation.date)
+                p_fecha.append("Dia de reserva:   " + reservation.date)
 
                 const p_comensales = document.createElement("p")
                 p_comensales.setAttribute("class", "card-text")
-                p_comensales.append("Numero de comensales: " + reservation.diners)
+                p_comensales.append("Numero de comensales:   " + reservation.diners)
 
                 const p_timeo_of_day = document.createElement("p")
                 p_timeo_of_day.setAttribute("class", "card-text")
-                p_timeo_of_day.append("Momento del dia: " + reservation.time_of_day)
+
+                let reservation_time_of_day = ""
+
+                if (reservation.time_of_day === "lunch") {
+                    reservation_time_of_day = "Almuerzo"
+                } else {
+                    reservation_time_of_day = "Cena"
+                }
+                p_timeo_of_day.append("Momento del dia:   " + reservation_time_of_day)
 
                 const btn_conteiner = document.createElement("div")
                 btn_conteiner.setAttribute("class", "d-grid gap-2 d-md-flex justify-content-md-end")
