@@ -192,6 +192,32 @@ def get_restaurant_by_id(id):
     except Exception as error:
         return jsonify({'message' : 'server error'}), 500     
          
+@app.route('/reservations/<customer_id>', methods=['GET'])
+def get_reservations(customer_id):
+    try:
+        reservations = Reservation.query.filter_by(customer_id=customer_id).all()
+        reservations_data = []
+
+        if not reservations:
+            return jsonify(reservations_data), 201   
+           
+        for reservation in reservations:
+            print("hola")
+            restaurant = Restaurant.query.get(reservation.restaurant_id) 
+            print("hola?")
+            reservation_data = {
+                'id' : reservation.id,
+                'customer_id' : reservation.customer_id,
+                'restaurant_id' : reservation.restaurant_id,
+                'restaurant_name' : restaurant.name,
+                'diners' : reservation.diners,
+                'date' : reservation.date,
+                'time_of_day' : reservation.time_of_day,
+            }
+            reservations_data.append(reservation_data)
+        return jsonify(reservations_data), 201
+    except Exception as error:
+        return jsonify({'message' : 'server error'}), 500 
 
 @app.route('/reservations', methods=['GET'])
 def get_reservations():
