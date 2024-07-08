@@ -1,7 +1,12 @@
 <h1>
   Resto Book - Sistema de Reservas en Restaurantes
 </h1>
-
+<br>  <br/>
+<div align="center">
+    <img src="https://t4.ftcdn.net/jpg/02/94/26/33/360_F_294263329_1IgvqNgDbhmQNgDxkhlW433uOFuIDar4.jpg" title="Imagen de un Restaurant"
+       style="width: 60vw; height: auto;" />
+</div>
+<br>  <br/>
  <h2> Contenido: </h2>
 
 - Descripcion
