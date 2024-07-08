@@ -203,17 +203,17 @@ def update_reservation(id):
 
         diners = int(data.get('diners'))
         date = data.get('date')
-      
+        print("date",date)
         capacity = restaurant.capacity
         
         reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
        
         total_diners = sum(reservation.diners for reservation in reservations)
-        print(total_diners)
-        print(data['diners'])
-        print(diners)
-        total_diners = total_diners - diners
-        print(total_diners)
+        print("comensales totales en el dia: ",total_diners)
+        print("nuevo comensales: ",data['diners'])
+        print("comensales pre update: ",reservation.diners)
+        total_diners = total_diners - reservation.diners
+        print("total: ",total_diners)
 
         if total_diners + int(diners) > capacity:
             return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False }), 400
