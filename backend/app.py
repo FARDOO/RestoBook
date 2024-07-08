@@ -196,15 +196,41 @@ def update_reservation(id):
     print(data)
     reservation = Reservation.query.get(id)  
     try:
+       
+        restaurant_id = reservation.restaurant_id 
+        restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
+
+
+        diners = int(data.get('diners'))
+        date = data.get('date')
+      
+        capacity = restaurant.capacity
+        
+        reservations = Reservation.query.filter_by(restaurant_id=restaurant_id, date=date).all()
+       
+        total_diners = sum(reservation.diners for reservation in reservations)
+        print(total_diners)
+        print(data['diners'])
+        print(diners)
+        total_diners = total_diners - diners
+        print(total_diners)
+
+        if total_diners + int(diners) > capacity:
+            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False }), 400
+        elif data['time_of_day'] == 'lunch' and not restaurant.lunch:
+            return jsonify({'message': 'Este restaurante no sirve almuerzo', 'exitoso': False}), 400
+        elif data['time_of_day'] == 'dinner' and not restaurant.dinner:
+            return jsonify({'message': 'Este restaurante no sirve cena', 'exitoso': False}), 400
+        
         reservation.date = data['date']
         reservation.diners = data['diners']
         reservation.time_of_day = data['time_of_day']
-        
+
         db.session.commit() 
-        return jsonify({'message': 'Reserva actualizada con exito'}), 200
+        return jsonify({'message': 'Reserva actualizada con exito', 'exitoso': True}), 200
     except Exception as e:
         db.session.rollback()  
-        return jsonify({'message': 'server error'}), 500 
+        return jsonify({'message': 'server error', 'exitoso': False}), 500 
 
 
 
@@ -290,12 +316,12 @@ def add_reservation():
         restaurant = Restaurant.query.filter_by(id=restaurant_id).first()
         if not restaurant:
             print("1")
-            return jsonify({'message': 'Restaurante no encontrado'}), 404
+            return jsonify({'message': 'Restaurante no encontrado', 'exitoso': True}), 404
         
         customer = Customer.query.filter_by(name=customer_name).first()
         if not customer:
             print("2")
-            return jsonify({'message': 'Cliente no resgistrado, por favor registrese'}), 404
+            return jsonify({'message': 'Cliente no resgistrado, por favor registrese', 'exitoso': True}), 404
         
         customer_id = customer.id
 
@@ -310,11 +336,11 @@ def add_reservation():
         total_diners = sum(reservation.diners for reservation in reservations)
         print("D")
         if total_diners + int(diners) > capacity:
-            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha'}), 400
+            return jsonify({'message': 'Capacidad máxima excedida para este restaurante y fecha', 'exitoso': False}), 400
         elif time_of_day == 'lunch' and not restaurant.lunch:
-            return jsonify({'message': 'Este restaurante no sirve almuerzo'}), 400
+            return jsonify({'message': 'Este restaurante no sirve almuerzo', 'exitoso': False}), 400
         elif time_of_day == 'dinner' and not restaurant.dinner:
-            return jsonify({'message': 'Este restaurante no sirve cena'}), 400
+            return jsonify({'message': 'Este restaurante no sirve cena', 'exitoso': False}), 400
         print("E")
         new_reservation = Reservation(customer_id = customer_id, restaurant_id = restaurant_id,
                                       diners = diners, date = date, time_of_day = time_of_day)
@@ -325,12 +351,12 @@ def add_reservation():
         print("H")
 
         return jsonify({
-            'message': 'Reserva creada exitosamente',
+            'message': 'Reserva creada exitosamente', 'exitoso': True
         }), 201
     
     except Exception as error:
         print("error: ", error)
-        return jsonify({'message' : 'server error'}), 500     
+        return jsonify({'message' : 'server error', 'exitoso': False}), 500     
 
 
 @app.route('/deletereservation/<id>', methods=['DELETE'])

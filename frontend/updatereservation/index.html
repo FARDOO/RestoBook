@@ -233,7 +233,9 @@
 
             function parse_data_reservation(data) {
                 alert(data.message)
-                //   window.location.href = 'http://localhost:8000/index.html'
+                if (data.exitoso) {
+                    window.location.href = "/"
+                }
             }
 
             function submit_error_reservation(error) {
