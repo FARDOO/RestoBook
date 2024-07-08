@@ -43,25 +43,28 @@ Resto Book es una aplicación web diseñada para facilitar la reserva de mesas e
   
   La Base de Datos esta conformada por tres tablas: 
 
-  - Restaurant: id (Primary Key)
-                name (Nombre del Restaurant)
-                capacity (Capacidad maxima por dia)
-                dinner (True si esta disponible para cenar)
-                lunch (True si esta disponible para almorzar)
-                image_url (Direccion URL de la imagen del Restaurant)
+  - Restaurant:
+    - id (Primary Key)
+    - name (Nombre del Restaurant)
+    - capacity (Capacidad maxima por dia)
+    - dinner (True si esta disponible para cenar)
+    - lunch (True si esta disponible para almorzar)
+    - image_url (Direccion URL de la imagen del Restaurant)
 
-  - Customer: id (Primary Key)
-              name (Nombre del cliente)
-              password (Constraseña del cliente)
-              email (mail del cliente)
-              reservation_list (relacion entre tablas)
+  - Customer:
+    - id (Primary Key)
+    - name (Nombre del cliente)
+    - password (Constraseña del cliente)
+    - email (mail del cliente)
+    - reservation_list (relacion entre tablas)
 
-  - Reservation: id (Primary Key)
-                 customer_id (Foreign Key del cliente)
-                 restaurant_id (Foreign Key del restaurant)
-                 diners (Cantidad de personas en la reserva)
-                 date (Fecha de la reserva)
-                 time_of_day(Si es para cenar o almorzar)
+  - Reservation:
+    - id (Primary Key)
+    - customer_id (Foreign Key del cliente)
+    - restaurant_id (Foreign Key del restaurant)
+    - diners (Cantidad de personas en la reserva)
+    - date (Fecha de la reserva)
+    - time_of_day(Si es para cenar o almorzar)
 
 <h2> Endpoints: </h2>
 
