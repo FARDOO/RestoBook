@@ -13,6 +13,7 @@ port = 5000
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://santiago:1234@localhost:5432/restobook_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker(bind=engine)
 session = Session()
