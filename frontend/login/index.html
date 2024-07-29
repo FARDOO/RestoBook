@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -24,12 +24,12 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          <a class="nav-link" href="#">Mis reservas</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" href="#">My Reservations</a>
         </div>
       </div>
       <div class="d-flex">
-        <button id="register_btn" class="btn btn-outline-info" type="submit">Registrarse</button>
+        <button id="register_btn" class="btn btn-outline-info" type="submit">Sign up</button>
       </div>
     </div>
   </nav>
@@ -38,22 +38,22 @@
     <div class="p-4 conteiner mb-3 p-3 ">
       <div id="conteiner" class="conteiner-card card p-3">
         <div class="card-body p-5">
-          <h2 class="text-uppercase text-center mb-5">Iniciar sesion</h2>
+          <h2 class="text-uppercase text-center mb-5">Log in</h2>
           <form id="login_user_form">
             <div data-mdb-input-init class="form-outline mb-4">
               <input type="text" id="user_name" name="name" class="form-control form-control-lg" />
-              <label class="form-label" for="form3Example1cg">Nombre de usuario</label>
+              <label class="form-label" for="form3Example1cg">Username</label>
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
               <input type="password" id="user_password" name="password" class="form-control form-control-lg" />
-              <label class="form-label" for="form3Example4cg">Contraseña</label>
+              <label class="form-label" for="form3Example4cg">Password</label>
             </div>
             <div class="d-flex justify-content-center">
               <button id="login_btn" type="submit" data-mdb-button-init data-mdb-ripple-init
-                class="btn btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Iniciar sesion</button>
+                class="btn btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Log in</button>
             </div>
-            <p class="text-center text-muted mt-5 mb-0">No tiene una cuenta? <a href="/register"
-                class="fw-bold text-body"><u>Registrese desde aqui</u></a></p>
+            <p class="text-center text-muted mt-5 mb-0">Don't have an account?<a href="/register"
+                class="fw-bold text-body"><u>Register from here</u></a></p>
           </form>
         </div>
       </div>
@@ -87,9 +87,9 @@
     function login(content) {
 
       if (content.login_u === "false") {
-        alert("El nombre de usuario ingresado no existe")
+        alert("The username entered does not exist")
       } else if (content.login_p === "false") {
-        alert("La contraseña ingresada es incorrecta")
+        alert("The password entered is incorrect")
       } else {
         const cookie = "id = " + content.id + ' ; ' + "name = " + content.name + ' ; '
         document.cookie = "id =" + content.id + "; expires=Thu, 18 Dec 2024 12:00:00 UTC; path=/"
@@ -120,10 +120,10 @@
             .then(login)
             .catch(request_error)
         } else {
-          alert("Campo contraseña vacio o demaciado corto.")
+          alert("Password field empty or too short.")
         }
       } else {
-        alert("Campo nombre de usuario vacio o demaciado corto.")
+        alert("Username field empty or too short.")
       }
     })
 

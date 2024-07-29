@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -24,8 +24,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-                    <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a id="reservations_btn" class="nav-link" href="#">My Reservations</a>
                 </div>
 
             </div>
@@ -41,7 +41,7 @@
 
     <div class="container">
         <h3 class="my- text-center" id="title"></h3>
-        <h5 class="text-center">Actualice su reserva</h5>
+        <h5 class="text-center">Update your reservation</h5>
         <form id="reservation" class="reservation_form">
             <input type="hidden" id="restaurant_id" name="restaurant_id">
             <input type="hidden" id="user_name" name="customer_name">
@@ -49,32 +49,33 @@
             <div class="row mb-3">
                 <div class="col-md-6">
 
-                    <label for="diners" class="form-label">Cantidad de Comensales:</label>
+                    <label for="diners" class="form-label">Number of Diners:</label>
                     <input type="number" class="form-control" id="diners" name="diners" min="1" max="25" required>
                 </div>
                 <div class="col-md-6">
-                    <label for="date" class="form-label">Fecha de Reserva:</label>
+                    <label for="date" class="form-label">Reservation date:</label>
                     <input type="date" class="form-control" name="date" id="date" required>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="time_option" class="form-label">Hora de Reserva:</label>
+                    <label for="time_option" class="form-label">Reservation Time:</label>
                     <select class="form-select" name="time_of_day" id="time_option" required>
-                        <option value="lunch">Almuerzo</option>
-                        <option value="dinner">Cena</option>
+                        <option value="lunch">Launch</option>
+                        <option value="dinner">Dinner</option>
                     </select>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12">
-                    <label for="message" class="form-label">Mensaje Adicional:</label>
-                    <textarea class="form-control" id="message" rows="3" placeholder="Mensaje opcional"></textarea>
+                    <label for="message" class="form-label">Additional Message:</label>
+                    <textarea class="form-control" id="message" rows="3" placeholder="Optional Message"></textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12 text-center">
-                    <button type="submit" id="update_button" class="btn btn-outline-success">Actualizar Reserva</button>
+                    <button type="submit" id="update_button" class="btn btn-outline-success">Update your
+                        reservation</button>
                 </div>
             </div>
         </form>
@@ -92,7 +93,7 @@
             if (document.cookie.length > 0) {
                 window.location.href = "/myreservations"
             } else {
-                alert("inicie sesion para ver sus reservas.")
+                alert("Log in to view your reservations.")
                 window.location.href = "/"
             }
         })
@@ -143,7 +144,7 @@
             session.removeEventListener("click", log_out)
             session.addEventListener("click", log_in, true)
             session.removeChild(session.firstChild)
-            session.append("Iniciar sesion")
+            session.append("Log in")
 
             window.location.href = "/"
         }
@@ -155,10 +156,10 @@
                 user_name = get_cookie('name');
                 //muestro al usuario logueado
                 const user_message = document.getElementById("user_message")
-                user_message.innerHTML = "Hola, " + user_name + "!"
+                user_message.innerHTML = "Hello, " + user_name + "!"
                 //agrego boton cerrar sesion al lado del saludo al usuario 
                 const session = document.getElementById("session_btn")
-                session.append("Cerrar sesion")
+                session.append("Log out")
                 session.setAttribute("class", "btn btn-outline-danger")
                 session.addEventListener("click", log_out, true);
             } else if (document.cookie.length === 0) {
@@ -166,13 +167,13 @@
                 const session = document.getElementById("session_btn")
                 session.removeEventListener("click", log_out)
                 session.addEventListener("click", log_in, true)
-                session.append("Iniciar sesion")
+                session.append("Log in")
                 //agrego boton para registarse a lado de iniciar sesion
                 const buttons = document.getElementById("session_btns")
                 register_btn = document.createElement("button")
                 register_btn.setAttribute("class", "btn btn-outline-btn btn-outline-info ms-2")
                 register_btn.setAttribute("type", "submit")
-                register_btn.append("Resgistrarse")
+                register_btn.append("Sign up")
                 register_btn.addEventListener("click", register);
                 buttons.append(register_btn)
 
@@ -196,7 +197,7 @@
         function parse_data(reservation) {
             const title = document.getElementById("title")
             title.setAttribute("class", "text-center")
-            title.textContent = "Esta actualizando una reserva en el Restaurant " + reservation.restaurant_name
+            title.textContent = "You are updating a reservation at the Restaurant " + reservation.restaurant_name
 
             document.getElementById('restaurant_id').value = reservation.restaurant_id;
             const select_element = document.getElementById('time_option');

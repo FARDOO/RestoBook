@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -24,8 +24,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-                    <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a id="reservations_btn" class="nav-link" href="#">My Reservations</a>
                 </div>
             </div>
             <div id="session_btns" class="d-flex">
@@ -70,7 +70,7 @@
 
                 window.location.href = "/myreservations"
             } else {
-                alert("inicie sesion para ver sus reservas.")
+                alert("Log in to view your reservations.")
                 window.location.href = "/"
             }
 
@@ -109,7 +109,7 @@
             session.removeEventListener("click", log_out)
             session.addEventListener("click", log_in, true)
             session.removeChild(session.firstChild)
-            session.append("Iniciar sesion")
+            session.append("Log in")
 
             window.location.href = "/"
         }
@@ -119,22 +119,22 @@
                 user_id = get_cookie('id');
                 user_name = get_cookie('name');
                 const user_message = document.getElementById("user_message")
-                user_message.innerHTML = "Hola, " + user_name + "!"
+                user_message.innerHTML = "Hello, " + user_name + "!"
                 const session = document.getElementById("session_btn")
-                session.append("Cerrar sesion")
+                session.append("Log out")
                 session.setAttribute("class", "btn btn-outline-danger")
                 session.addEventListener("click", log_out, true);
             } else if (document.cookie.length === 0) {
                 const session = document.getElementById("session_btn")
                 session.removeEventListener("click", log_out)
                 session.addEventListener("click", log_in, true)
-                session.append("Iniciar sesion")
+                session.append("Log in")
 
                 const buttons = document.getElementById("session_btns")
                 register_btn = document.createElement("button")
                 register_btn.setAttribute("class", "btn btn-outline-btn btn-outline-info ms-2")
                 register_btn.setAttribute("type", "submit")
-                register_btn.append("Resgistrarse")
+                register_btn.append("Sign up")
                 register_btn.addEventListener("click", register);
                 buttons.append(register_btn)
             }
@@ -182,7 +182,7 @@
             if (content.length == 0) {
                 const title = document.createElement("h2")
                 title.setAttribute("class", "text-center")
-                title.append("No tiene reservas generadas")
+                title.append("No reservations generated")
                 container.append(title)
             } else {
                 container.setAttribute("class", " row justify-content-center align-items-center p-5 mx-auto")
@@ -201,11 +201,11 @@
                     const p_fecha = document.createElement("p")
                     p_fecha.setAttribute("class", "card-text")
                     console.log(reservation.date)
-                    p_fecha.append("Dia de reserva:   " + reservation.date)
+                    p_fecha.append("Reservation day:   " + reservation.date)
 
                     const p_comensales = document.createElement("p")
                     p_comensales.setAttribute("class", "card-text")
-                    p_comensales.append("Numero de comensales:   " + reservation.diners)
+                    p_comensales.append("Number of diners:  " + reservation.diners)
 
                     const p_timeo_of_day = document.createElement("p")
                     p_timeo_of_day.setAttribute("class", "card-text")
@@ -213,11 +213,11 @@
                     let reservation_time_of_day = ""
 
                     if (reservation.time_of_day === "lunch") {
-                        reservation_time_of_day = "Almuerzo"
+                        reservation_time_of_day = "Lunch"
                     } else {
-                        reservation_time_of_day = "Cena"
+                        reservation_time_of_day = "Dinner"
                     }
-                    p_timeo_of_day.append("Momento del dia:   " + reservation_time_of_day)
+                    p_timeo_of_day.append("Time of the day:   " + reservation_time_of_day)
 
                     const btn_conteiner = document.createElement("div")
                     btn_conteiner.setAttribute("class", "d-grid gap-2 d-md-flex justify-content-md-end")
@@ -225,13 +225,13 @@
                     const btn_delete = document.createElement("button")
                     btn_delete.setAttribute("class", "btn btn btn-outline-danger - md - 2")
                     btn_delete.setAttribute("value", reservation.id)
-                    btn_delete.append("Cancelar")
+                    btn_delete.append("Cancel")
                     btn_delete.addEventListener('click', delete_reservation)
 
                     const btn_update = document.createElement("button")
                     btn_update.setAttribute("class", "btn btn btn-outline-warning")
                     btn_update.setAttribute("value", reservation.id)
-                    btn_update.append("Modificar")
+                    btn_update.append("Modify")
                     btn_conteiner.append(btn_update)
                     btn_conteiner.append(btn_delete)
 

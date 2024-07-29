@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -24,8 +24,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          <a id="reservations_btn" class="nav-link" href="#">Mis reservas</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a id="reservations_btn" class="nav-link" href="#">My Reservations</a>
         </div>
       </div>
       <div id="session_btns" class="d-flex">
@@ -60,7 +60,7 @@
       if (document.cookie.length > 0) {
         window.location.href = "/myreservations"
       } else {
-        alert("inicie sesion para ver sus reservas.")
+        alert("Log in to view your reservations.")
         window.location.href = "/"
       }
     })
@@ -128,35 +128,34 @@
 
       const reservationButton = document.createElement("button");
       reservationButton.setAttribute("class", "btn btn-outline-success");
-      reservationButton.innerHTML = "Realizar Reserva";
+      reservationButton.innerHTML = "Make Reservation";
       reservationButton.addEventListener("click", function () {
 
         if (document.cookie.length === 0) {
 
-          alert("Inicie sesion para realizar reservas.")
+          alert("Log in to make reservations.")
         } else {
           window.location.href = "/createreservation?id=" + restaurant_id + "&name=" + restaurant_name;
         }
-
       });
 
       const text = document.createElement("p")
       text.setAttribute("class", "card-text")
-      text.innerHTML = "<br>Bienvenido a " + restaurant.name + ", donde la pasión por la buena comida se une con la excelencia en el servicio. "
-        + "Disfruta de una experiencia gastronómica única en un ambiente acogedor y hospitalario, diseñado para hacer que te sientas como en casa.<br>"
-        + "Nuestro variado menú ofrece una selección de platos cuidadosamente elaborados de alta calidad.<br>Desde sabrosos platos tradicionales hasta innovadoras "
-        + "creaciones culinarias, cada bocado está preparado con dedicación y pasión. Ya sea que estés celebrando una ocasión especial o simplemente disfrutando "
-        + "de una comida casual, nuestro restaurante es el lugar perfecto.<br><br>1) Las reservas solo se mantienen durante 15 minutos después de la hora acordada."
-        + "<br>2) Si necesitas cancelar tu reserva, por favor, realizarlo con al menos 24 horas de antelación.";
+      text.innerHTML = "<br>Welcome to " + restaurant.name + ", where the passion for good food meets excellence in service. "
+        + "Enjoy an unique gastronomic experience in a cozy and hospitable environment, designed to make you feel at home.<br>"
+        + "Our varied menu offers a selection of carefully prepared, high-quality dishes.<br>From tasty traditional dishes to innovative ones "
+        + "culinary creations, each bite is prepared with dedication and passion. Whether you are celebrating a special occasion or simply enjoying "
+        + "for a casual meal, our restaurant is the perfect place.<br><br>1) Reservations are only held for 15 minutes after the agreed time."
+        + "<br>2) If you need to cancel your reservation, please do so at least 24 hours in advance.";
 
       if (restaurant.dinner && restaurant.lunch) {
-        subtitle.append(" Disponible para cenar y almorzar ")
+        subtitle.append(" Available for dinner and lunch ")
       }
       else if (restaurant.lunch) {
-        subtitle.append(" Disponible unicamente para almorzar ")
+        subtitle.append(" Available only for lunch ")
       }
       else if (restaurant.dinner) {
-        subtitle.append(" Disponible unicamente para cenar ")
+        subtitle.append(" Available for dinner only ")
       }
 
       card_body.append(title)
@@ -185,7 +184,7 @@
       session.removeEventListener("click", log_out)
       session.addEventListener("click", log_in, true)
       session.removeChild(session.firstChild)
-      session.append("Iniciar sesion")
+      session.append("Log in")
 
       window.location.href = "/"
     }
@@ -195,22 +194,22 @@
         user_id = get_cookie('id');
         user_name = get_cookie('name');
         const user_message = document.getElementById("user_message")
-        user_message.innerHTML = "Hola, " + user_name + "!"
+        user_message.innerHTML = "Hello, " + user_name + "!"
         const session = document.getElementById("session_btn")
-        session.append("Cerrar sesion")
+        session.append("Log out")
         session.setAttribute("class", "btn btn-outline-danger")
         session.addEventListener("click", log_out, true);
       } else if (document.cookie.length === 0) {
         const session = document.getElementById("session_btn")
         session.removeEventListener("click", log_out)
         session.addEventListener("click", log_in, true)
-        session.append("Iniciar sesion")
+        session.append("Sign up")
 
         const buttons = document.getElementById("session_btns")
         register_btn = document.createElement("button")
         register_btn.setAttribute("class", "btn btn-outline-btn btn-outline-info ms-2")
         register_btn.setAttribute("type", "submit")
-        register_btn.append("Resgistrarse")
+        register_btn.append("Sign up")
         register_btn.addEventListener("click", register);
         buttons.append(register_btn)
 
