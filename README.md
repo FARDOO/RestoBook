@@ -1,106 +1,105 @@
 <h1>
-  RestoBook - Sistema de Reservas en Restaurantes
+  RestoBook - Restaurant Reservation System
 </h1>
 <div align="center">
-    <img src="https://t4.ftcdn.net/jpg/02/94/26/33/360_F_294263329_1IgvqNgDbhmQNgDxkhlW433uOFuIDar4.jpg" title="Imagen de un Restaurant"
+    <img src="https://t4.ftcdn.net/jpg/02/94/26/33/360_F_294263329_1IgvqNgDbhmQNgDxkhlW433uOFuIDar4.jpg" title="Restaurant Image"
        style="width: 60vw; height: auto;" />
 </div>
- <h2> Contenido: </h2>
+ <h2> Content: </h2>
 
-- Descripción
-- Características
-- Tecnologías Utilizadas
-- Integrantes
-- Estructura de la Base de Datos
+- Description
+- Features
+- Technologies Used
+- Team Members
+- Database Structure
 - Endpoints
-- Direcciones
+- Addresses
 
-<h2> Descripción </h2>
+<h2> Description </h2>
 
-Resto Book es una aplicación web diseñada para facilitar la reserva de mesas en diversos restaurantes de la ciudad. Los usuarios pueden registrarse, iniciar sesión, ver una lista de restaurantes, y realizar, actualizar o cancelar reservas.
+Resto Book is a web application designed to facilitate table reservations at various restaurants in the city. Users can sign up, log in, view a list of restaurants, and make, update, or cancel reservations.
 
 <h2> Caracteristicas:</h2>
 
-- Registro de nuevos clientes.
-- Inicio de sesión de clientes.
-- Visualización de una lista de restaurantes.
-- Realización de reservas en restaurantes.
-- Actualización y cancelación de reservas existentes.
-- Validaciones de capacidad y disponibilidad de servicios (almuerzo/cena).
+- Registration of new customers.
+- Customer login.
+- Viewing a list of restaurants.
+- Making reservations at restaurants.
+- Updating and canceling existing reservations.
+- Validations for capacity and service availability (lunch/dinner).
 
-<h2> Tecnologias Utilizadas </h2>
+<h2> Technologies Used </h2>
 
 1. Backend: Flask, SQLAlchemy
 2. Frontend: Framework Bootstrap
-3. Base de Datos: PostgreSQL
+3. DataBase: PostgreSQL
 
-<h2> Integrantes:</h2>
+<h2> Team Members:</h2>
 
 - Condori Hector 
 - Santiago Fardini
 
-<h2> Estructura de la Base de Datos: </h2>
+<h2> Database Structure: </h2>
   
-  La Base de Datos esta conformada por tres tablas: 
+  The Database is composed of three tables:
 
-  - Restaurant:
-    - id (Primary Key)
-    - name (Nombre del Restaurant)
-    - capacity (Capacidad máxima por día)
-    - dinner (True si esta disponible para cenar)
-    - lunch (True si esta disponible para almorzar)
-    - image_url (Direccion URL de la imagen del Restaurant)
+- Restaurant:
+  - id (Primary Key)
+  - name (Name of the Restaurant)
+  - capacity (Maximum capacity per day)
+  - dinner (True if available for dinner)
+  - lunch (True if available for lunch)
+  - image_url (URL address of the Restaurant's image)
 
-  - Customer:
-    - id (Primary Key)
-    - name (Nombre del cliente)
-    - password (Constraseña del cliente)
-    - email (mail del cliente)
-    - reservation_list (relación entre tablas)
+- Customer:
+  - id (Primary Key)
+  - name (Name of the customer)
+  - password (Customer's password)
+  - email (Customer's email)
+  - reservation_list (table relationship)
 
-  - Reservation:
-    - id (Primary Key)
-    - customer_id (Foreign Key del cliente)
-    - restaurant_id (Foreign Key del restaurant)
-    - diners (Cantidad de personas en la reserva)
-    - date (Fecha de la reserva)
-    - time_of_day(Si es para cenar o almorzar)
+- Reservation:
+  - id (Primary Key)
+  - customer_id (Customer's Foreign Key)
+  - restaurant_id (Restaurant's Foreign Key)
+  - diners (Number of people in the reservation)
+  - date (Reservation date)
+  - time_of_day (Whether it's for dinner or lunch)
 
 <h2> Endpoints: </h2>
 
-1. Clientes
-    - GET /customers: Obtener la lista de clientes.
-    - POST /login: Iniciar sesión.
-    - POST /customer: Registrar un nuevo cliente.
+1. Customers
+    - GET /customers: Get the list of customers.
+    - POST /login: Log in.
+    - POST /customer: Register a new customer.
 
-2. Restaurantes
-    - GET /restaurants: Obtener la lista de restaurantes.
-    - GET /restaurants/<id>: Obtener un restaurante por su ID.
+2. Restaurants
+    - GET /restaurants: Get the list of restaurants.
+    - GET /restaurants/<id>: Get a restaurant by its ID.
 
-3. Reservas
-    - POST /reservation: Crear una nueva reserva.
-    - GET /reservation/<id>: Obtener una reserva por su ID.
-    - GET /reservations/<customer_id>: Obtener reservas por ID de cliente.
-    - GET /reservations: Obtener todas las reservas.
-    - PUT /updatereservation/<id>: Actualizar una reserva.
-    - DELETE /deletereservation/<id>: Eliminar una reserva.
+3. Reservations
+    - POST /reservation: Create a new reservation.
+    - GET /reservation/<id>: Get a reservation by its ID.
+    - GET /reservations/<customer_id>: Get reservations by customer ID.
+    - GET /reservations: Get all reservations.
+    - PUT /updatereservation/<id>: Update a reservation.
+    - DELETE /deletereservation/<id>: Delete a reservation.
+  
+<h2> Addresses: </h2>
 
-<h2> Direcciones: </h2>
-
-- Inicio (Me muestra el listado de todos los Restaurants):
+- Home (Shows the list of all Restaurants):
   "/"
-- Restaurant (Me muestra información del Restaurant seleccionado):
-  "/restauant/?id="id"&name="name""
-- Realizar Reserva (Form para realizar la reserva en el Restaurant previamente seleccionado):
-  "/createreservation/?id="id"&name="name">
-- Ver mis reservas (Vemos las reservas a nuestro nombre):
-  "/myreservations/
-- Modificar reservas (Modificamos la reserva seleccionada):
+- Restaurant (Shows information of the selected Restaurant):
+  "/restaurant/?id="id"&name="name""
+- Make Reservation (Form to make a reservation at the previously selected Restaurant):
+  "/createreservation/?id="id"&name="name""
+- View My Reservations (View reservations under our name):
+  "/myreservations/"
+- Update Reservation (Update the selected reservation):
   "/updatereservation/?id="id""
-- Log in (Permite iniciar sesión):
+- Log in (Allows user to log in):
   "/login/"
-- Registrarse (Permite crarnos un Usuario):
+- Register (Allows user to create an account):
   "/register/"
-
 
 
