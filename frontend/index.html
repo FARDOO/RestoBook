@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -24,8 +24,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" aria-current="page" href="/">Inicio</a>
-                    <a class="nav-link" href="#">Mis reservas</a>
+                    <a class="nav-link" aria-current="page" href="/">Home</a>
+                    <a id="reservations_btn" class="nav-link" href="#">My Reservations</a>
                 </div>
             </div>
 
@@ -38,13 +38,28 @@
     </nav>
 
     <main>
-        <div id="restaurant_card" class="row row-cols-lg-5 g-lg-5 p-5">
+        <div id="restaurant_card" class="container-fluid row row-cols-lg-5 g-lg-5 p-4 mx-auto">
         </div>
     </main>
 
     <script>
         var user_id = ""
         var user_name = ""
+
+        const reservations_btn = document.getElementById("reservations_btn")
+
+        reservations_btn.addEventListener("click", (event) => {
+
+            event.preventDefault()
+
+            if (document.cookie.length > 0) {
+                window.location.href = "/myreservations"
+            } else {
+                alert("Log in to view your reservations.")
+                window.location.href = "/"
+            }
+        })
+
 
         function get_cookie(name) {
             const cookieValue = document.cookie
@@ -81,7 +96,7 @@
             session.removeEventListener("click", log_out)
             session.addEventListener("click", log_in, true)
             session.removeChild(session.firstChild)
-            session.append("Iniciar sesion")
+            session.append("Log in")
 
             window.location.href = "/"
         }
@@ -91,22 +106,23 @@
                 user_id = get_cookie('id');
                 user_name = get_cookie('name');
                 const user_message = document.getElementById("user_message")
-                user_message.innerHTML = "Hola, " + user_name + "!"
+                user_message.innerHTML = "Hello, " + user_name + "!"
                 const session = document.getElementById("session_btn")
-                session.append("Cerrar sesion")
+                session.append("Log out")
                 session.setAttribute("class", "btn btn-outline-danger")
                 session.addEventListener("click", log_out, true);
+
             } else if (document.cookie.length === 0) {
                 const session = document.getElementById("session_btn")
                 session.removeEventListener("click", log_out)
                 session.addEventListener("click", log_in, true)
-                session.append("Iniciar sesion")
+                session.append("Log in")
 
                 const buttons = document.getElementById("session_btns")
                 register_btn = document.createElement("button")
                 register_btn.setAttribute("class", "btn btn-outline-btn btn-outline-info ms-2")
                 register_btn.setAttribute("type", "submit")
-                register_btn.append("Resgistrarse")
+                register_btn.append("Sign up")
                 register_btn.addEventListener("click", register);
                 buttons.append(register_btn)
 
@@ -121,7 +137,7 @@
         function parse_data(content) {
 
             content.forEach(restaurant => {
-                const container = document.getElementById("restaurant_card") // Se podria poner por fuera del forEach asi se hace solo una vez ???
+                const container = document.getElementById("restaurant_card")
 
                 const card_conteiner = document.createElement("div")
                 card_conteiner.setAttribute("class", "col")
@@ -133,7 +149,7 @@
                 card.setAttribute("style", "height: 28rem;")
 
                 const image_conteiner = document.createElement("image-box")
-                image_conteiner.setAttribute("class", "mt-2 mx-auto p-2 image-conteiner")
+                image_conteiner.setAttribute("class", "mt-2 mx-auto image-conteiner")
                 image_conteiner.setAttribute("style", "width: 16rem;")
                 image_conteiner.setAttribute("style", "height: 16rem;")
 

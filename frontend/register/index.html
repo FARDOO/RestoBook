@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -24,12 +24,12 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link active" aria-current="page" href="/">Inicio</a>
-          <a class="nav-link" href="#">Mis reservas</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <a class="nav-link" href="#">My Reservations</a>
         </div>
       </div>
       <div class="d-flex">
-        <button id="login_btn" class="btn btn-outline-success" type="submit">Inicar sesion</button>
+        <button id="login_btn" class="btn btn-outline-success" type="submit">Log in</button>
       </div>
     </div>
   </nav>
@@ -39,13 +39,13 @@
       <div id="conteiner" class="conteiner-card card">
 
         <div class="card-body p-5">
-          <h2 class="text-uppercase text-center mb-5">Registrarse</h2>
+          <h2 class="text-uppercase text-center mb-5">Sign up</h2>
 
           <form id="user_form">
 
             <div data-mdb-input-init class="form-outline mb-4">
               <input type="text" id="user_name" name="name" class="form-control form-control-lg" />
-              <label class="form-label" for="form3Example1cg">Nombre de usuario (mayor a 5 caracteres)</label>
+              <label class="form-label" for="form3Example1cg">Username (greater than 5 characters)</label>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
@@ -55,17 +55,17 @@
 
             <div data-mdb-input-init class="form-outline mb-4">
               <input type="password" id="user_password" name="password" class="form-control form-control-lg" />
-              <label class="form-label" for="form3Example4cg">Contraseña (mayor a 4 caracteres)</label>
+              <label class="form-label" for="form3Example4cg">Password (greater than 4 characters)</label>
             </div>
 
 
             <div class="d-flex justify-content-center">
               <button id="register_btn" type="submit" data-mdb-button-init data-mdb-ripple-init
-                class="btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Registrarse</button>
+                class="btn btn-outline-success btn-block btn-lg gradient-custom-4 ">Sign up</button>
             </div>
 
-            <p class="text-center text-muted mt-5 mb-0">¿Ya tiene una cuenta? <a href="/login"
-                class="fw-bold text-body"><u>Ingrese desde aqui</u></a></p>
+            <p class="text-center text-muted mt-5 mb-0">Do you already have an account? <a href="/login"
+                class="fw-bold text-body"><u>Enter from here</u></a></p>
 
           </form>
 
@@ -101,12 +101,12 @@
       const name_exists = content.name_exists
       const email_exists = content.email_exists
       if (name_exists === "true") {
-        alert("El nombre de usuario ingresado ya exiate, ingrese otro por favor")
+        alert("The name entered already exists, please enter another one")
       }
       if (email_exists === "true") {
-        alert("El email ingresado ya exiate, ingrese otro por favor")
+        alert("The email entered is already exiated, please enter another")
       } else {
-        alert("Se registro con exito! Ya puede iniciar sesion!")
+        alert("Successful registration! You can now log in!")
         window.location.href = "/login"
       }
     }
@@ -119,11 +119,11 @@
       data_new_user = Object.fromEntries(data_form)
       emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
       if (data_new_user.name.length < 6) {
-        alert("Ingrese un nombre de usuario mas largo")
+        alert("Enter a longer username")
       } else if (data_new_user.password.length < 5) {
-        alert("Ingrese una contraseña mas largo")
+        alert("Enter a longer password")
       } else if (!emailRegex.test(data_new_user.email)) {
-        alert("Ingrese un email valido")
+        alert("Enter a valid email")
       } else {
         let url = "http://127.0.0.1:5000//customer"
 
