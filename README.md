@@ -19,7 +19,7 @@
 
 Resto Book is a web application designed to facilitate table reservations at various restaurants in the city. Users can sign up, log in, view a list of restaurants, and make, update, or cancel reservations.
 
-<h2> Caracteristicas:</h2>
+<h2> Characteristics:</h2>
 
 - Registration of new customers.
 - Customer login.
