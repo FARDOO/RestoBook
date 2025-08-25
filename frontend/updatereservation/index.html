@@ -34,13 +34,14 @@
                 <span id="user_message" class="navbar-text me-3">
                 </span>
                 <button id="session_btn" class="btn btn-outline-success" type="submit"></button>
+                </dib>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <h2 class="my- text-center" id="title"></h2>
-        <h5 class="text-center">Please complete the fields</h5>
+        <h3 class="my- text-center" id="title"></h3>
+        <h5 class="text-center">Update your reservation</h5>
         <form id="reservation" class="reservation_form">
             <input type="hidden" id="restaurant_id" name="restaurant_id">
             <input type="hidden" id="user_name" name="customer_name">
@@ -49,8 +50,7 @@
                 <div class="col-md-6">
 
                     <label for="diners" class="form-label">Number of Diners:</label>
-                    <input type="number" class="form-control" id="diners" name="diners" min="1" max="25"
-                        placeholder="Enter the number of diners" required>
+                    <input type="number" class="form-control" id="diners" name="diners" min="1" max="25" required>
                 </div>
                 <div class="col-md-6">
                     <label for="date" class="form-label">Reservation date:</label>
@@ -61,7 +61,6 @@
                 <div class="col-md-6">
                     <label for="time_option" class="form-label">Reservation Time:</label>
                     <select class="form-select" name="time_of_day" id="time_option" required>
-                        <option disabled selected>Time</option>
                         <option value="lunch">Launch</option>
                         <option value="dinner">Dinner</option>
                     </select>
@@ -70,18 +69,20 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <label for="message" class="form-label">Additional Message:</label>
-                    <textarea class="form-control" id="message" rows="3" placeholder="Optional message"></textarea>
+                    <textarea class="form-control" id="message" rows="3" placeholder="Optional Message"></textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-12 text-center">
-                    <button type="submit" id="submit_button" class="btn btn-outline-success">Send Reservation</button>
+                    <button type="submit" id="update_button" class="btn btn-outline-success">Update your
+                        reservation</button>
                 </div>
             </div>
         </form>
     </div>
 
     <script>
+
 
         const reservations_btn = document.getElementById("reservations_btn")
 
@@ -92,22 +93,14 @@
             if (document.cookie.length > 0) {
                 window.location.href = "/myreservations"
             } else {
-                alert("log in to see your reservations.")
+                alert("Log in to view your reservations.")
                 window.location.href = "/"
             }
         })
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0];
-            const dateInput = document.getElementById('date');
-            dateInput.setAttribute('min', formattedDate);
-        });
-
         //Recivo por medio de la url como parametro el id y nombre del restaurante seleccionado
         const param = new URLSearchParams(window.location.search)
-        const restaurant_id = param.get("id")
-        const restaurant_name = param.get("name")
+        const reservation_id = param.get("id")
 
         //veo si la cookie que se creo para guardar la informacion del usuario logueado existe
         if (document.cookie.length === 0) {
@@ -118,6 +111,7 @@
         var user_id = ""
         var user_name = ""
         user_is_login()
+
 
         function get_cookie(name) {
             const cookieValue = document.cookie
@@ -179,7 +173,7 @@
                 register_btn = document.createElement("button")
                 register_btn.setAttribute("class", "btn btn-outline-btn btn-outline-info ms-2")
                 register_btn.setAttribute("type", "submit")
-                register_btn.append("Sing up")
+                register_btn.append("Sign up")
                 register_btn.addEventListener("click", register);
                 buttons.append(register_btn)
 
@@ -187,13 +181,47 @@
 
         }
 
-        const title = document.getElementById("title")
-        title.setAttribute("class", "text-center")
-        title.textContent = "You are making a reservation at the Restaurant" + restaurant_name
-
-        document.getElementById('restaurant_id').value = restaurant_id;
         document.getElementById('user_name').value = user_name;
 
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const dateInput = document.getElementById('date');
+            dateInput.setAttribute('min', formattedDate);
+        });
+
+        function response_received(response) {
+            return response.json()
+        }
+
+        function parse_data(reservation) {
+            const title = document.getElementById("title")
+            title.setAttribute("class", "text-center")
+            title.textContent = "You are updating a reservation at the Restaurant " + reservation.restaurant_name
+
+            document.getElementById('restaurant_id').value = reservation.restaurant_id;
+            const select_element = document.getElementById('time_option');
+            const options = select_element.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === reservation.time_of_day) {
+                    options[i].selected = true;
+                }
+            }
+            document.getElementById('diners').value = reservation.diners
+            document.getElementById('date').value = reservation.date
+        }
+
+        function request_error(error) {
+            console.log("ERROR")
+            console.log(error)
+        }
+
+
+        let url = "http://127.0.0.1:5000/reservation/" + reservation_id
+        fetch(url)
+            .then(response_received)
+            .then(parse_data)
+            .catch(request_error)
 
 
         function submit_form(event) {
@@ -206,7 +234,7 @@
             function parse_data_reservation(data) {
                 alert(data.message)
                 if (data.exitoso) {
-                    window.location.href = "/"
+                    window.location.href = "/myreservations"
                 }
             }
 
@@ -219,13 +247,13 @@
             console.log(Object.fromEntries(form))
 
 
-            let url = 'http://127.0.0.1:5000/reservation'
+            let url = 'http://127.0.0.1:5000/updatereservation/' + reservation_id
             fetch(url, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(Object.fromEntries(form)) // Convertir los datos a JSON
+                body: JSON.stringify(Object.fromEntries(form))
             })
                 .then(response_received_reservation)
                 .then(parse_data_reservation)
